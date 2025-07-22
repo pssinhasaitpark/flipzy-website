@@ -1,0 +1,21 @@
+/* app.css */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap");
+
+body {
+  font-family: "Poppins", "Inter", sans-serif !important;
+}
+
+.primary-color-bg {
+  background-color: #00c853 !important;
+}
+.primary-color {
+  color: #00c853;
+}
+
+.secondary-color-bg {
+  background-color: #f5f5f5;
+}
+.secondary-color {
+  color: #f5f5f5;
+}
