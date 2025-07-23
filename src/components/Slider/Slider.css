@@ -1,12 +1,4 @@
-.slider-container {
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  scroll-behavior: smooth;
-}
 
-.slider-item {
-  min-width: 180px;
-  flex: 0 0 auto;
+.rounded-pill:hover {
+  color: white !important;
 }

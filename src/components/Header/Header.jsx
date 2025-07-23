@@ -168,7 +168,7 @@ const CustomNavbar = () => {
             className="d-inline-block align-top"
             alt="Logo"
           />
-          <span className="ms-2 mx-3">FreeUp</span>
+          {/* <span className="ms-2 mx-3">FreeUp</span> */}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
