@@ -19,3 +19,13 @@ body {
 .secondary-color {
   color: #f5f5f5;
 }
+.vertical-slider {
+  max-height: 130px;
+  width: 100%;
+}
+.review-slider{
+  width: 12%;
+}
+.vertical-slider .carousel .slide {
+  background: transparent;
+}

@@ -5,4 +5,7 @@ import FooterBottom from "./Footer/FooterBottom";
 import Slider from './Slider/Slider.jsx'
 import PopularBrands from "./PopularBrands/PopularBrands.jsx";
 import LowestPrice from "./LowestPrice/LowestPrice.jsx";
-export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice}
+import Cards from "./cards/Cards.jsx"
+import ReviewSlider from "./ReviewSlider/ReviewSlider.jsx"
+
+export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider}
