@@ -20,8 +20,8 @@ const HeaderTop = () => {
   }, [dispatch]);
 
   return (
-    <div className="category-header-top px-3">
-      <div className="category-list px-4">
+    <div className="category-header-top px-3 d-lg-flex">
+      <div className="category-list px-4 d-lg-flex justify-content-center ">
         {categoryData.map((category) => (
           <div
             key={category.cat_id}
@@ -55,14 +55,14 @@ const HeaderTop = () => {
       <style jsx>{`
         .category-header-top {
           width: 100%;
-          display: flex;
+          // display: flex;
           justify-content: center;
           align-items: center;
           min-height: 90px;
           background: #fff;
         }
         .category-list {
-          display: flex;
+          // display: flex;
           flex-direction: row;
           gap: 40px;
           justify-content: center;

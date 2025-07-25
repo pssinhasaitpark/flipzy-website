@@ -22,66 +22,40 @@
 
 // export default CustomCard;
 import React from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import abc from "../../assets/images/abc.png";
-const StepCards = () => {
-  const steps = [
-    {
-      id: 1,
-      img: abc,
-      title: "List in 30 Seconds",
-    },
-    {
-      id: 2,
-      img: abc,
-      title: "Doorstep Pickup, Deliver all over India",
-    },
-    {
-      id: 3,
-      img: abc,
-      title: "Easy & Safe Payments",
-    },
+
+// Import your images
+import img1 from "../../assets/images/card1.png";
+import img2 from "../../assets/images/card2.png";
+import img3 from "../../assets/images/xard3.png";
+
+function ThreeCards() {
+  // Array of card data
+  const cardData = [
+    { title: "", text: "", image: img1 },
+    { title: "", text: "", image: img2 },
+    { title: "", text: "", image: img3 },
   ];
 
   return (
-    <div className="d-flex justify-content-center gap-3 p-3">
-      {steps.map((step) => (
-        <div
-          key={step.id}
-          className="text-center border rounded p-2"
-          style={{ width: "180px", backgroundColor: "#fff" }}
-        >
-          <div className="position-relative">
-            <img
-              src={step.img}
-              alt={`Step ${step.id}`}
-              className="img-fluid rounded"
-              style={{ height: "110px", width: "100%", objectFit: "cover" }}
-            />
-            <div
-              className="position-absolute card-body-overlay top-0 start-0 bg-light rounded-circle d-flex align-items-center justify-content-center"
-              style={{
-                width: "30px",
-                height: "30px",
-                fontWeight: "bold",
-                fontSize: "1.1rem",
-                border: "1.5px solid #000",
-                transform: "translate(10%, -30%)",
-              }}
-            >
-              {step.id}
-            </div>
-          </div>
-          <div
-            className="mt-2"
-            style={{ fontWeight: "600", fontSize: "0.9rem", color: "#222" }}
-          >
-            {step.title}
-          </div>
-        </div>
-      ))}
-    </div>
+    <Container className="my-4 mt-5 pt-2">
+      <Row className="g-4 justify-content-center border-0">
+        {cardData.map((card, index) => (
+          <Col xs={12} md={6} lg={4} key={index}>
+            <Card className="border-0 w-100">
+              <Card.Img variant="top" src={card.image} />
+              {/* <Card.Body>
+                <Card.Title>{card.title}</Card.Title>
+                <Card.Text>{card.text}</Card.Text>
+                
+              </Card.Body> */}
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
-};
+}
 
-export default StepCards;
+export default ThreeCards;

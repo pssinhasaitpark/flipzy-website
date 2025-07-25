@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchModuleData } from "../../redux/slices/apiSlice";
+import React from "react";
+
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "./Slider.css";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
-const SliderComponent = ({ heading }) => {
-  const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.api);
-  const productData = data.products?.product || [];
-
-  console.log("sdfsdfasfasd",productData)
-  useEffect(() => {
-    dispatch(fetchModuleData({ module_action: "products" }));
-  }, [dispatch]);
+const SliderComponent = ({ heading, items }) => {
+  console.log("sdfsdfasfasd", items);
 
   return (
-    <Container className="my-5">
+    <div >
+    <Container className="my-5" >
       <div className="row d-flex justify-content-between m-3">
         <h2 className="text-center mb-4">{heading}</h2>
         <Button
@@ -27,70 +21,124 @@ const SliderComponent = ({ heading }) => {
         </Button>
       </div>
       <div style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
-        <Row className="flex-nowrap" style={{ flexWrap: "nowrap" }}>
-          {productData.map((product, idx) => (
-            <Col
+        <Row className="flex-nowrap ml-2" style={{ flexWrap: "nowrap" }}>
+          {items.map((product, idx) => (
+           <div
               key={idx}
-              xs={10}
-              sm={6}
-              md={4}
-              lg={3}
-              className="mb-4"
+              className="mb-3"
               style={{
-                display: "inline-block",
-                float: "none",
-                maxWidth: "300px",
+                flex: "0 0 auto",
+                width: "190px",
+                marginRight: "16px",
               }}
             >
-              <Card className="h-100 d-flex flex-column">
-                <Card.Img
-                  variant="top"
-                  src={product.product_slider_image[0]?.image || "https://via.placeholder.com/150"}
-                  className="p-3"
+               <Card
+                className="h-100 w-100 border-0 position-relative"
+                style={{ 
+                  borderRadius: "10px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+                }}
+              >
+                {/* Sold Badge */}
+                {/* <Badge
+                  bg="secondary"
+                  className="position-absolute top-0 start-0 m-2"
+                  style={{ zIndex: 1 }}
+                >
+                  Sold
+                </Badge> */}
+
+                {/* Image */}
+                   <div
                   style={{
-                    height: "auto",
-                    maxHeight: "200px",
-                    objectFit: "contain",
-                    width: "100%",
+                    height: "220px",
+                    width: "190px",
+                    margin: "0px auto",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    position: "relative",
                   }}
-                />
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title
+                >
+                  <Card.Img
+                    src={
+                      product.product_slider_image[0]?.image ||
+                      "https://via.placeholder.com/220x250"
+                    }
                     style={{
-                      fontSize: "1.1rem",
-                      whiteSpace: "normal",
-                      overflowWrap: "break-word",
+                      height: "100%",
+                      width: "150%",
+          
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+
+                {/* Body */}
+                    <Card.Body className="px-3 py-2">
+                    <Card.Title
+                    className="mb-1 text-black fw-bold"
+                    style={{
+                      fontSize: "0.9rem",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {product.product_name}
                   </Card.Title>
                   <Card.Text
-                    style={{
-                      flexGrow: 1,
-                      overflowWrap: "break-word",
-                      whiteSpace: "normal",
-                      fontSize: "0.9rem",
-                      marginBottom: "1rem",
-                    }}
+                    className="text-muted"
+                    style={{ fontSize: "0.85rem" }}
                   >
-                    {product.product_detail}
+                    {/* Waist: {product.waist || "30 inches"} */}
                   </Card.Text>
-                  <div className="d-flex">
-                    <Card.Text
-                      className="font-weight-bold px-2"
-                      style={{ fontSize: "1rem" }}
-                    >
+                  <div className="d-flex align-items-center">
+                    <span className="fw-bolder text-success me-2">
                       ₹{product.selling_price}
-                    </Card.Text>
-                    <strike className="">₹{product.mrp}</strike>
+                    </span>
+                    <span className="ml-2">
+                      <strike
+                        className="text-muted "
+                        style={{ fontSize: "0.85rem" }}
+                      >
+                        ₹{product.mrp}
+                      </strike>
+                    </span>
+                  </div>
+                  <div className="pt-3">
+                    <span className="fw-bolder text-black me-2">
+                      {product.username}
+                    </span>
+                    <div className="d-flex mt-2">
+                      {[...Array(4)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          style={{
+                            color: "green",
+                            fontSize: "1rem",
+                            marginRight: "3px",
+                          }}
+                        />
+                      ))}
+                      <FaRegStar
+                        style={{
+                          color: "grey",
+                          fontSize: "1rem",
+                          marginLeft: "3px",
+                          stroke: "grey",
+                          strokeWidth: "10",
+                        }}
+                      />
+                    </div>
                   </div>
                 </Card.Body>
               </Card>
-            </Col>
+            </div>
           ))}
         </Row>
       </div>
     </Container>
+    </div>
   );
 };
 

@@ -7,5 +7,5 @@ import PopularBrands from "./PopularBrands/PopularBrands.jsx";
 import LowestPrice from "./LowestPrice/LowestPrice.jsx";
 import Cards from "./cards/Cards.jsx"
 import ReviewSlider from "./ReviewSlider/ReviewSlider.jsx"
-
-export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider}
+import HeroSection from "./HeroSection/HeroSection.jsx"
+export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection}
