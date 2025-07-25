@@ -1,5 +1,5 @@
 import React from "react";
-import { logo } from "../../assets/index";
+import logo from "../../assets/images/flipzy_online_store.png";
 const Footer = () => {
   return (
     <footer className="text-light py-5" style={{ backgroundColor: "#212121" }}>
@@ -12,7 +12,7 @@ const Footer = () => {
                 className="text-dark fw-bold text-center"
                 style={{ fontSize: "20px" }}
               >
-                <img src={logo} alt="image" className="img-fluid w-25" />
+                <img src={logo} alt="image" className="img-fluid w-50" />
               </div>
             </div>
           </div>

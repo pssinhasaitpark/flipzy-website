@@ -8,27 +8,27 @@ const FooterBottom = () => {
   return (
     <div className="py-3" style={{ backgroundColor: "#000000" }}>
       <div className="container">
-        <hr className="text-secondary mb-3" />
+        <hr className="text-secondary mb-1" />
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           <div>
             <small className="text-light d-block">
-              © {currentYear} by Seva Bharti Malwa
+              © Flipzy {currentYear} 
             </small>
           </div>
           <div>
             <small className="text-light">
-              Address: #225, Himmatgange, 2nd Floor, 12th Cross Road, 2nd Stage,
-              Indiranagar, Bengaluru - 560038
+             Terms of Use | Privacy Policy
+
             </small>
           </div>
           <div className="d-flex">
-            <a href="#" className="text-light me-3 text-decoration-none">
+            <a href="#" className="text-light me-3 mx-2 text-decoration-none">
               <FaInstagram size={24} />
             </a>
-            <a href="#" className="text-light me-3 text-decoration-none">
+            <a href="#" className="text-light me-3 mx-2  text-decoration-none">
               <FaFacebook size={24} />
             </a>
-            <a href="#" className="text-light text-decoration-none">
+            <a href="#" className="text-light  mx-2 text-decoration-none">
               <FaLinkedin size={24} />
             </a>
           </div>
