@@ -12,6 +12,7 @@ import {
   Cards,
   ReviewSlider,
   HeroSection,
+  DownloadQR,
 } from "../components/index.js";
 
 const LandingPage = () => {
@@ -26,9 +27,9 @@ const LandingPage = () => {
   const freshDealsData = data[products]?.product || [];
 
   useEffect(() => {
-    dispatch(fetchModuleData({ module_action: exclusiveProducts }));
-    dispatch(fetchModuleData({ module_action: manufacturerProducts }));
-    dispatch(fetchModuleData({ module_action: products }));
+    dispatch(fetchModuleData({ module_action: exclusiveProducts,params:{limit:10} }));
+    dispatch(fetchModuleData({ module_action: manufacturerProducts,params:{limit:10} }));
+    dispatch(fetchModuleData({ module_action: products,params:{limit:10} }));
   }, [dispatch]);
 
   return (
@@ -39,15 +40,13 @@ const LandingPage = () => {
       <Cards />
       <LowestPrice />
       {/* <PopularBrands /> */}
-      <div style={{ backgroundColor: "#f6fef6" }}>
-        <Slider heading="Flipzy Exclusive Item" items={exclusiveProductData} />
-        <Slider
-          heading="Manufacturer's Market"
-          items={manufacturerProductData}
-        />
-        <Slider heading="Fresh Deals & Giveaways" items={freshDealsData} />
-      </div>
+      {/* <div style={{ backgroundColor: "#f6fef6" }}> */}
+      <Slider heading="Flipzy Exclusive Item" items={exclusiveProductData} seeDetails="exclusiveProducts" />
+      <Slider heading="Manufacturer's Market" items={manufacturerProductData}  seeDetails="manufacturerProducts"/>
+      <Slider heading="Fresh Deals & Giveaways" items={freshDealsData}  seeDetails="products"/>
+      {/* </div> */}
       {/* <ReviewSlider /> */}
+      <DownloadQR />
       <Footer />
       <FooterBottom />
     </div>

@@ -23,22 +23,7 @@ const Footer = () => {
             <ul className="list-unstyled">
               <li className="mb-2">
                 <a href="#" className="text-light text-decoration-none">
-                  Women
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Men
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Baby & Kids
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Beauty & Care
+                  Beauty
                 </a>
               </li>
               <li className="mb-2">
@@ -48,7 +33,7 @@ const Footer = () => {
               </li>
               <li className="mb-2">
                 <a href="#" className="text-light text-decoration-none">
-                  Home & Kitchen
+                  Electronics
                 </a>
               </li>
               <li className="mb-2">
@@ -58,19 +43,39 @@ const Footer = () => {
               </li>
               <li className="mb-2">
                 <a href="#" className="text-light text-decoration-none">
-                  Sports & Leisure
+                  Health and Wellness
                 </a>
               </li>
               <li className="mb-2">
                 <a href="#" className="text-light text-decoration-none">
-                  Tickets & Vouchers
+                  Home & Living
+                </a>
+              </li>
+              <li className="mb-2">
+                <a href="#" className="text-light text-decoration-none">
+                  Kids
+                </a>
+              </li>
+              <li className="mb-2">
+                <a href="#" className="text-light text-decoration-none">
+                  Men's Fashion
+                </a>
+              </li>
+              <li className="mb-2">
+                <a href="#" className="text-light text-decoration-none">
+                  Sports and Outdoors
+                </a>
+              </li>
+              <li className="mb-2">
+                <a href="#" className="text-light text-decoration-none">
+                  Women's Fashion
                 </a>
               </li>
             </ul>
           </div>
 
           {/* Popular Brands Column */}
-          <div className="col-md-2 mb-4">
+          {/* <div className="col-md-2 mb-4">
             <h6 className="text-warning mb-3 fw-bold">Popular Brands</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
@@ -134,7 +139,7 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Company Column */}
           <div className="col-md-2 mb-4">
