@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 
 const SliderComponent = ({ heading, items, seeDetails }) => {
   console.log("sdfsdfasfasd", items);
-
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <div>
       <Container className="my-5">
@@ -66,18 +68,20 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
                       position: "relative",
                     }}
                   >
-                    <Card.Img
-                      src={
-                        product.product_slider_image[0]?.image ||
-                        "https://via.placeholder.com/220x250"
-                      }
-                      style={{
-                        // height: "100%",
-                        // width: "150%",
+                    <Link to="/cartDetails" onClick={scrollToTop}>
+                      <Card.Img
+                        src={
+                          product.product_slider_image[0]?.image ||
+                          "https://via.placeholder.com/220x250"
+                        }
+                        style={{
+                          // height: "100%",
+                          // width: "150%",
 
-                        objectFit: "cover",
-                      }}
-                    />
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Link>
                   </div>
 
                   {/* Body */}

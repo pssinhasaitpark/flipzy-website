@@ -1,87 +1,94 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchModuleData } from "../../redux/slices/apiSlice"; // Adjust the import path as necessary
 import { HeaderSeeAll } from "../../components/index";
 import { Card } from "react-bootstrap";
 import { FaRegStar, FaStar } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const SeeAllPage = () => {
   const { module_action } = useParams();
-  console.log(module_action);
-  // Sample data for the items
-  const items = [
-    {
-      id: 1,
-      name: "Gel Liner",
-      price: "₹450",
-      mrp: "₹500",
-      image: "url_to_image",
-      category: "Beauty & Care",
-      username: "User1",
-    },
-    {
-      id: 2,
-      name: "Face Razor For Women",
-      price: "₹170",
-      mrp: "₹200",
-      image: "url_to_image",
-      category: "Beauty & Care",
-      username: "User2",
-    },
-    {
-      id: 3,
-      name: "Alia Peties Imported Zipper Jacket",
-      price: "₹349",
-      mrp: "₹400",
-      image: "url_to_image",
-      category: "Women",
-      username: "User3",
-    },
-    {
-      id: 4,
-      name: "Reitmanz Imported Zipper Jacket",
-      price: "₹349",
-      mrp: "₹450",
-      image: "url_to_image",
-      category: "Women",
-      username: "User4",
-    },
-    {
-      id: 5,
-      name: "PAC 231 Foundation Brush",
-      price: "₹400",
-      mrp: "₹450",
-      image: "url_to_image",
-      category: "Beauty & Care",
-      username: "User5",
-    },
-    {
-      id: 6,
-      name: "PAC 265 Makeup Brush",
-      price: "₹375",
-      mrp: "₹400",
-      image: "url_to_image",
-      category: "Beauty & Care",
-      username: "User6",
-    },
-    {
-      id: 7,
-      name: "Westside Noun Dress",
-      price: "₹500",
-      mrp: "₹600",
-      image: "url_to_image",
-      category: "Women",
-      username: "User7",
-    },
-    {
-      id: 8,
-      name: "Apple AirPods Pro 2nd Gen",
-      price: "3000 Coins",
-      mrp: "3500 Coins",
-      image: "url_to_image",
-      category: "Gadgets",
-      username: "User8",
-    },
-  ];
+  const dispatch = useDispatch();
+  const [pageNo, setPageNo] = useState(1);
+  const { data } = useSelector((state) => state.api);
+  const items = data[module_action]?.product || [];
+  const totalItems = data[module_action]?.totalCounts || 0;
+  const itemsPerPage = 20;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const pageNeighbours = 2; 
+  const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  const pageNumbers = useMemo(() => {
+    if (totalPages <= 1) return [1];
+    
+    const pages = [];
+    const showEllipsisThreshold = 2;
+    
+    pages.push(1);
+    
+    let rangeStart = Math.max(2, pageNo - pageNeighbours);
+    let rangeEnd = Math.min(totalPages - 1, pageNo + pageNeighbours);
+    
+    const maxVisiblePages = 2 * pageNeighbours + 1;
+    if (rangeEnd - rangeStart + 1 < maxVisiblePages) {
+      if (rangeStart === 2) {
+        rangeEnd = Math.min(totalPages - 1, rangeStart + maxVisiblePages - 1);
+      } else if (rangeEnd === totalPages - 1) {
+        rangeStart = Math.max(2, rangeEnd - maxVisiblePages + 1);
+      }
+    }
+    
+    if (rangeStart > 2) {
+      pages.push("left-ellipsis");
+    }
+    
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      if (i !== 1 && i !== totalPages) {
+        pages.push(i);
+      }
+    }
+    
+    if (rangeEnd < totalPages - 1) {
+      pages.push("right-ellipsis");
+    }
+    
+    if (totalPages > 1 && !pages.includes(totalPages)) {
+      pages.push(totalPages);
+    }
+    
+    return pages;
+  }, [pageNo, totalPages, pageNeighbours]);
+
+  useEffect(() => {
+    // Only fetch if we have a valid page number
+    if (pageNo > 0 && pageNo <= totalPages) {
+      dispatch(
+        fetchModuleData({
+          module_action: module_action,
+          params: { limit: itemsPerPage, page_no: pageNo },
+        })
+      );
+    }
+  }, [dispatch, module_action, pageNo, totalPages]);
+
+  const handleNextPage = () => {
+    if (pageNo < totalPages) {
+      setPageNo(prev => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (pageNo > 1) {
+      setPageNo(prev => prev - 1);
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    if (pageNumber !== pageNo && pageNumber >= 1 && pageNumber <= totalPages) {
+      setPageNo(pageNumber);
+    }
+  };
 
   return (
     <div>
@@ -260,22 +267,22 @@ const SeeAllPage = () => {
                       boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                   >
+                    
                     <div
                       style={{
                         height: "220px",
-                        width: "190px",
                         margin: "0px auto",
-                        borderRadius: "10px",
                         overflow: "hidden",
                         position: "relative",
                       }}
                     >
+                      <Link to="/cartDetails" onClick={scrollToTop}>
                       <Card.Img
-                        src={
-                          item.image || "https://via.placeholder.com/220x250"
-                        }
+                        src={item.product_slider_image?.[0]?.image}
                         style={{ objectFit: "cover" }}
+                        alt={item.product_name}
                       />
+                      </Link>
                     </div>
                     <Card.Body className="px-3 py-2">
                       <Card.Title
@@ -287,17 +294,17 @@ const SeeAllPage = () => {
                           textOverflow: "ellipsis",
                         }}
                       >
-                        {item.name}
+                        {item.product_name}
                       </Card.Title>
                       <Card.Text
                         className="text-muted"
                         style={{ fontSize: "0.85rem" }}
                       >
-                        {item.category}
+                        {item.cat_name}
                       </Card.Text>
                       <div className="d-flex align-items-center">
                         <span className="fw-bolder text-success me-2">
-                          {item.price}
+                          {item.selling_price}
                         </span>
                         <span className="ml-2">
                           <strike
@@ -339,6 +346,87 @@ const SeeAllPage = () => {
                 </div>
               ))}
             </div>
+            
+            {/* Pagination - Only show if there are multiple pages */}
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-center mt-4">
+                <ul
+                  className="pagination"
+                  style={{ listStyle: "none", display: "flex", padding: 0 }}
+                >
+                  <li className="page-item" style={{ margin: "0 5px" }}>
+                    <button
+                      className="page-link"
+                      onClick={handlePreviousPage}
+                      disabled={pageNo === 1}
+                      style={{
+                        border: "none",
+                        background: "none",
+                        cursor: pageNo === 1 ? "not-allowed" : "pointer",
+                        opacity: pageNo === 1 ? 0.5 : 1,
+                      }}
+                    >
+                      &lt;
+                    </button>
+                  </li>
+
+                  {pageNumbers.map((number, idx) => {
+                    if (
+                      number === "left-ellipsis" ||
+                      number === "right-ellipsis"
+                    ) {
+                      return (
+                        <li
+                          key={`ellipsis-${idx}`}
+                          className="page-item"
+                          style={{ margin: "0 5px" }}
+                        >
+                          <span style={{ padding: "0 5px" }}>...</span>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li
+                        key={number}
+                        className="page-item"
+                        style={{ margin: "0 5px" }}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageClick(number)}
+                          style={{
+                            border: "none",
+                            background: "none",
+                            cursor: "pointer",
+                            color: pageNo === number ? "red" : "black",
+                            fontWeight: pageNo === number ? "bold" : "normal",
+                          }}
+                        >
+                          {number}
+                        </button>
+                      </li>
+                    );
+                  })}
+
+                  <li className="page-item" style={{ margin: "0 5px" }}>
+                    <button
+                      className="page-link"
+                      onClick={handleNextPage}
+                      disabled={pageNo === totalPages}
+                      style={{
+                        border: "none",
+                        background: "none",
+                        cursor: pageNo === totalPages ? "not-allowed" : "pointer",
+                        opacity: pageNo === totalPages ? 0.5 : 1,
+                      }}
+                    >
+                      &gt;
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>
