@@ -27,9 +27,21 @@ const LandingPage = () => {
   const freshDealsData = data[products]?.product || [];
 
   useEffect(() => {
-    dispatch(fetchModuleData({ module_action: exclusiveProducts,params:{limit:10} }));
-    dispatch(fetchModuleData({ module_action: manufacturerProducts,params:{limit:10} }));
-    dispatch(fetchModuleData({ module_action: products,params:{limit:10} }));
+    dispatch(
+      fetchModuleData({
+        module_action: exclusiveProducts,
+        params: { limit: 10 },
+      })
+    );
+    dispatch(
+      fetchModuleData({
+        module_action: manufacturerProducts,
+        params: { limit: 10 },
+      })
+    );
+    dispatch(
+      fetchModuleData({ module_action: products, params: { limit: 10 } })
+    );
   }, [dispatch]);
 
   return (
@@ -41,9 +53,21 @@ const LandingPage = () => {
       <LowestPrice />
       {/* <PopularBrands /> */}
       {/* <div style={{ backgroundColor: "#f6fef6" }}> */}
-      <Slider heading="Flipzy Exclusive Item" items={exclusiveProductData} seeDetails="exclusiveProducts" />
-      <Slider heading="Manufacturer's Market" items={manufacturerProductData}  seeDetails="manufacturerProducts"/>
-      <Slider heading="Fresh Deals & Giveaways" items={freshDealsData}  seeDetails="products"/>
+      <Slider
+        heading="Flipzy Exclusive Item"
+        items={exclusiveProductData}
+        seeDetails="exclusiveProducts"
+      />
+      <Slider
+        heading="Manufacturer's Market"
+        items={manufacturerProductData}
+        seeDetails="manufacturerProducts"
+      />
+      <Slider
+        heading="Fresh Deals & Giveaways"
+        items={freshDealsData}
+        seeDetails="products"
+      />
       {/* </div> */}
       {/* <ReviewSlider /> */}
       <DownloadQR />
