@@ -1,0 +1,26 @@
+.rateNo {
+  color: #000;
+  font-family: MontserratB !important;
+  font-size: 26px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.rateTxt{
+    color: #999;
+    font-size: 20px;
+}
+
+.thumbnail-image {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.thumbnail-image.blurred {
+  filter: blur(2px);
+  opacity: 0.8;
+}
+
+.thumbnail-image:not(.blurred):hover {
+  filter: none;
+  opacity: 1;
+}
