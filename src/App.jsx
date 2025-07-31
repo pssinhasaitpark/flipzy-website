@@ -1,16 +1,16 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LandingPage } from "./layouts/index";
+import { LandingPage,CartDetailsLayout,SeeAllPageLayout } from "./layouts/index";
 import "./App.css";
-import SeeAllPage from "./views/pages/SeeAllPage";
-import { CartDetails } from "./views/pages";
+// import SeeAllPage from "./views/pages/SeeAllPage";
+// import { CartDetails } from "./views/pages";
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/cartdetails" element={<CartDetails />} />
-        <Route path="/seeall/:module_action" element={<SeeAllPage />} />
+        <Route path="/cartDetails/:name/:id" element={<CartDetailsLayout />} />
+        <Route path="/seeall/:module_action" element={<SeeAllPageLayout />} />
       </Routes>
     </BrowserRouter>
   );
