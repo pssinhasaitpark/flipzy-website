@@ -162,11 +162,13 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
     <Container className="my-5">
       <div className="row d-flex justify-content-between m-3">
         <h2 className="text-center mb-4">{heading}</h2>
-        <Link to={`/seeall/${seeDetails}`}
+        <Link
+          to={`/seeall/${seeDetails}`}
           onClick={() => {
-    scrollToTop();
-  }}
-  className="text-decoration-none">
+            scrollToTop();
+          }}
+          className="text-decoration-none"
+        >
           <Button
             variant="outline-secondary"
             className="rounded-pill px-4 py-1 fw-medium text-secondary border-2 d-block"
@@ -229,26 +231,30 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
                     />
                   </Link> */}
                   <Link
-  to={{
-    pathname: `/cartDetails/${encodeURIComponent(
-                      product.product_name
-                    )}/${product.id}`,
-  }}
-  state={{ product }}
-  onClick={() => {
-    scrollToTop();
-    console.log("Clicked Product:", product.product_name, "| ID:", product.id);
-  }}
->
-  <Card.Img
-    src={
-      product.product_slider_image[0]?.image ||
-      "https://via.placeholder.com/220x250"
-    }
-    style={{ objectFit: "cover" }}
-  />
-</Link>
-
+                    to={{
+                      pathname: `/cartDetails/${encodeURIComponent(
+                        product.product_name
+                      )}/${product.id}`,
+                    }}
+                    state={{ product }}
+                    onClick={() => {
+                      scrollToTop();
+                      console.log(
+                        "Clicked Product:",
+                        product.product_name,
+                        "| ID:",
+                        product.id
+                      );
+                    }}
+                  >
+                    <Card.Img
+                      src={
+                        product.product_slider_image[0]?.image ||
+                        "https://via.placeholder.com/220x250"
+                      }
+                      style={{ objectFit: "cover" }}
+                    />
+                  </Link>
                 </div>
 
                 <Card.Body className="px-3 py-2">
