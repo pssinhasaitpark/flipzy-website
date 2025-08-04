@@ -160,36 +160,44 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
 
   return (
     <Container className="my-5">
-      <div className="row d-flex justify-content-between m-3">
-        <h2 className="text-center mb-4">{heading}</h2>
-        <Link
-          to={`/seeall/${seeDetails}`}
-          onClick={() => {
-            scrollToTop();
-          }}
-          className="text-decoration-none"
-        >
-          <Button
-            variant="outline-secondary"
-            className="rounded-pill px-4 py-1 fw-medium text-secondary border-2 d-block"
-            style={{
-              fontSize: "1rem",
-              marginTop: "10px",
-              marginBottom: "10px",
+      <div className="row d-flex justify-content-between align-items-center mx-1 mx-md-3">
+        <div className="col-auto">
+          <h2 className="text-center text-md-start mb-2 mb-md-4">{heading}</h2>
+        </div>
+        <div className="col-auto">
+          <Link
+            to={`/seeall/${seeDetails}`}
+            onClick={() => {
+              scrollToTop();
             }}
+            className="text-decoration-none"
           >
-            See All
-          </Button>
-        </Link>
+            <Button
+              variant="outline-secondary"
+              className="rounded-pill px-3 px-md-4 py-1 fw-medium text-secondary border-2"
+              style={{
+                fontSize: "0.9rem",
+                marginTop: "5px",
+                marginBottom: "5px",
+              }}
+            >
+              See All
+            </Button>
+          </Link>
+        </div>
       </div>
-
+      
       <div style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
-        <Row className="flex-nowrap ml-2" style={{ flexWrap: "nowrap" }}>
+        <Row className="flex-nowrap" style={{ flexWrap: "nowrap", marginLeft: "8px", marginRight: "8px" }}>
           {items.map((product, idx) => (
             <div
               key={idx}
               className="mb-3"
-              style={{ flex: "0 0 auto", width: "190px", marginRight: "16px" }}
+              style={{ 
+                flex: "0 0 auto", 
+                width: "160px", 
+                marginRight: "12px"
+              }}
             >
               <Card
                 className="h-100 w-100 border-0 position-relative"
@@ -200,36 +208,14 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
               >
                 <div
                   style={{
-                    height: "220px",
-                    width: "190px",
+                    height: "180px",
+                    width: "160px",
                     margin: "0 auto",
                     borderRadius: "10px",
                     overflow: "hidden",
                     position: "relative",
                   }}
                 >
-                  {/* <Link
-                    to={`/cartDetails/${encodeURIComponent(
-                      product.product_name
-                    )}/${product.id}`}
-                    onClick={() => {
-                      scrollToTop();
-                      console.log(
-                        "Clicked Product:",
-                        product.product_name,
-                        "| ID:",
-                        product.id
-                      );
-                    }}
-                  >
-                    <Card.Img
-                      src={
-                        product.product_slider_image[0]?.image ||
-                        "https://via.placeholder.com/220x250"
-                      }
-                      style={{ objectFit: "cover" }}
-                    />
-                  </Link> */}
                   <Link
                     to={{
                       pathname: `/cartDetails/${encodeURIComponent(
@@ -250,18 +236,18 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
                     <Card.Img
                       src={
                         product.product_slider_image[0]?.image ||
-                        "https://via.placeholder.com/220x250"
+                        "https://via.placeholder.com/180x180"
                       }
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "cover", height: "100%", width: "100%" }}
                     />
                   </Link>
                 </div>
-
-                <Card.Body className="px-3 py-2">
+                
+                <Card.Body className="px-2 py-2">
                   <Card.Title
                     className="mb-1 text-black fw-bold"
                     style={{
-                      fontSize: "0.9rem",
+                      fontSize: "0.8rem",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -269,39 +255,50 @@ const SliderComponent = ({ heading, items, seeDetails }) => {
                   >
                     {product.product_name}
                   </Card.Title>
-                  <div className="d-flex align-items-center">
-                    <span className="fw-bolder text-success me-2">
+                  
+                  <div className="d-flex align-items-center mb-2">
+                    <span className="fw-bolder text-success me-2" style={{ fontSize: "0.9rem" }}>
                       ₹{product.selling_price}
                     </span>
-                    <span className="ml-2">
+                    <span>
                       <strike
                         className="text-muted"
-                        style={{ fontSize: "0.85rem" }}
+                        style={{ fontSize: "0.75rem" }}
                       >
                         ₹{product.mrp}
                       </strike>
                     </span>
                   </div>
-                  <div className="pt-3">
-                    <span className="fw-bolder text-black me-2">
+                  
+                  <div>
+                    <span 
+                      className="fw-bolder text-black"
+                      style={{ 
+                        fontSize: "0.75rem",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "block"
+                      }}
+                    >
                       {product.username}
                     </span>
-                    <div className="d-flex mt-2">
+                    <div className="d-flex mt-1">
                       {[...Array(4)].map((_, i) => (
                         <FaStar
                           key={i}
                           style={{
                             color: "green",
-                            fontSize: "1rem",
-                            marginRight: "3px",
+                            fontSize: "0.8rem",
+                            marginRight: "2px",
                           }}
                         />
                       ))}
                       <FaRegStar
                         style={{
                           color: "grey",
-                          fontSize: "1rem",
-                          marginLeft: "3px",
+                          fontSize: "0.8rem",
+                          marginLeft: "2px",
                         }}
                       />
                     </div>

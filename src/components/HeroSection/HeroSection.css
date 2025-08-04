@@ -1,14 +1,14 @@
 .hero-background {
   position: relative;
   height: 500px;
-  
+
   margin-bottom: 5rem;
-  transition: background-color 1s ease; 
+  transition: background-color 1s ease;
 }
 
 .hero-section {
   position: relative;
-  height: 550px;
+  height: 535px;
   left: 12rem;
   overflow: hidden;
   width: 1400px;
@@ -38,8 +38,7 @@
   left: 0;
   right: 0;
   top: 49rem;
-  height: 6.3%;
-  ;
+  height: 7%;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
@@ -50,11 +49,11 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-   backdrop-filter: blur(15px); 
+  backdrop-filter: blur(15px);
 }
 
 .hero-overlay::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -70,15 +69,16 @@
 }
 
 .hero-overlay p {
-  color: #000000; 
+  color: #000000;
   text-align: center;
   z-index: 3;
   padding: 0 20px;
   margin: 0;
   font-weight: 700;
   font-size: 15px;
-  position: relative; 
+  position: relative;
 }
+
 .dots-container {
   position: absolute;
   top: 82%;
@@ -122,20 +122,24 @@
   .hero-section {
     height: 400px;
   }
-}
 
-@media (max-width: 480px) {
-  .hero-section {
+  .hero-background {
     height: 300px;
   }
-  .dots-container {
-    bottom: 10px;
+
+  .hero-section {
+    left: 0rem;
+
+    width: 100%;
   }
+
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
   }
 }
+
+
 
 .arrow {
   position: absolute;
@@ -176,4 +180,27 @@
 
 .hero-section:hover .arrow {
   opacity: 1;
+}
+
+
+
+@media (max-width: 480px) {
+  .hero-section {
+    height: 190px;
+  }
+
+  .hero-background {
+    height: 110px;
+  }
+
+  .hero-overlay {
+    height: 3%;
+    top: 29rem;
+  }
+  .arrow {
+ 
+  width: 20px;
+  height: 20px;
+
+}
 }

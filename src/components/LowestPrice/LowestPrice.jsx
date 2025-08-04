@@ -19,28 +19,16 @@ const LowestPrice = () => {
               variant="top"
               src="https://imgs.justfreeup.com/zorro/51ea11011a70e54628553d660a9657d1.png"
             />
-            {/* <Card.Body>
-              <Card.Title>Card Title 1</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title.
-              </Card.Text>
-            </Card.Body> */}
           </Card>
         </Col>
 
-        <Col lg={4} md={6} sm={12} className="mb-4">
-          <Card className="border-0">
+        <Col lg={4} md={6} sm={12} className="mb-4 mid-col">
+          <Card className="border-0 mid-card">
             <Card.Img
-              className="p-4"
+              className="p-4 pe-5"
               variant="top"
               src="https://imgs.justfreeup.com/zorro/aa46796f588150fc43212b9d5101ff62.png"
             />
-            {/* <Card.Body>
-              <Card.Title>Card Title 2</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title.
-              </Card.Text>
-            </Card.Body> */}
           </Card>
         </Col>
 
@@ -51,12 +39,6 @@ const LowestPrice = () => {
               className="p-4"
               src="https://imgs.justfreeup.com/zorro/51ea11011a70e54628553d660a9657d1.png"
             />
-            {/* <Card.Body>
-              <Card.Title>Card Title 3</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title.
-              </Card.Text>
-            </Card.Body> */}
           </Card>
         </Col>
       </Row>
