@@ -10,7 +10,9 @@ const LowestPrice = () => {
           Buy Like-New Items at Lowest Prices
         </h1>
       </div>
+      
 
+      
       <Row>
         <Col lg={4} md={6} sm={12} className="mb-4">
           <Card className="border-0">
