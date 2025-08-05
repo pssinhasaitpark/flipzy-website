@@ -1,0 +1,11 @@
+.lowest-image{
+    width: 350px;
+}
+.lowest-image1{
+    width: 330px;
+}
+@media (max-width: 480px) {
+    .lowest-image1{
+    width: 310px;
+}
+}

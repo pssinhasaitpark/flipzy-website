@@ -79,7 +79,7 @@ const CartDetailsPage = () => {
     <Container fluid className="py-4" style={{ maxWidth: "1600px" }}>
       <Row>
         {/* Left Column - Thumbnail Images */}
-        <div className="col-sm-2 pe-2 p-0">
+        <div className="col-sm-2 pe-2 p-0 d-lg-block d-none">
           <div className="d-flex flex-column gap-2">
             {loading
               ? Array.from({ length: 3 }).map((_, idx) => (
@@ -117,13 +117,45 @@ const CartDetailsPage = () => {
           ) : (
             <Card className="border-light">
               <Card.Img
+              className="card-image"
                 variant="top"
                 src={productImages[selectedImage]?.image || card2}
                 alt="Main product view"
-                style={{ height: "800px", objectFit: "cover" }}
+                // style={{ height: "800px", objectFit: "cover" }}
               />
             </Card>
           )}
+        </div>
+         <div className="col-sm-2 pe-2 p-0 d-lg-none d-sm-block">
+          <div className="d-flex">
+            {loading
+              ? Array.from({ length: 3 }).map((_, idx) => (
+                  <Skeleton key={idx} height={180} width="100%" />
+                ))
+              : productImages.map((img, idx) => (
+                  <div
+                    key={img.image_id || idx}
+                    className={`cursor-pointer ${
+                      selectedImage === idx ? "" : ""
+                    }`}
+                    onMouseEnter={() => setSelectedImage(idx)}
+                    style={{ cursor: "pointer", overflow: "hidden" }}
+                  >
+                    <img
+                      src={img.image || card2}
+                      alt={`Thumbnail ${idx}`}
+                      className={`img-fluid p-3 thumbnail-image ${
+                        selectedImage !== idx ? "blurred" : ""
+                      }`}
+                      style={{
+                        height: "100px",
+                        width: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                ))}
+          </div>
         </div>
         {/* Right Column - Product Details */}
         <div className="col-sm-5 ps-4 mt-2">
