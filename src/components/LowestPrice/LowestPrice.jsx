@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import './LowestPrice.css'
 const LowestPrice = () => {
   return (
     <Container className="my-5 pt-3">
@@ -10,14 +9,11 @@ const LowestPrice = () => {
           Buy Like-New Items at Lowest Prices
         </h1>
       </div>
-      
-
-      
       <Row>
         <Col lg={4} md={6} sm={12} className="mb-4">
           <Card className="border-0">
             <Card.Img
-              className="p-4"
+              className="p-4 lowest-image"
               variant="top"
               src="https://imgs.justfreeup.com/zorro/51ea11011a70e54628553d660a9657d1.png"
             />
@@ -27,7 +23,7 @@ const LowestPrice = () => {
         <Col lg={4} md={6} sm={12} className="mb-4 mid-col">
           <Card className="border-0 mid-card">
             <Card.Img
-              className="p-4 pe-5"
+              className="lowest-image1 p-lg-4 p-0"
               variant="top"
               src="https://imgs.justfreeup.com/zorro/aa46796f588150fc43212b9d5101ff62.png"
             />
@@ -38,7 +34,7 @@ const LowestPrice = () => {
           <Card className="border-0">
             <Card.Img
               variant="top"
-              className="p-4"
+              className="p-4 lowest-image"
               src="https://imgs.justfreeup.com/zorro/51ea11011a70e54628553d660a9657d1.png"
             />
           </Card>
