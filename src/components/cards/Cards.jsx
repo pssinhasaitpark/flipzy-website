@@ -1,26 +1,3 @@
-// import React from 'react';
-// import Button from 'react-bootstrap/Button';
-// import Card from 'react-bootstrap/Card';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import './Cards.css'; // Create this CSS file for custom styles
-// import abc from "../../assets/images/abc.png"
-// function CustomCard() {
-//   return (
-//     <Card style={{ width: '18rem', position: 'relative' }}>
-//       <Card.Img variant="top" src={abc}/>
-//       <Card.Body className="card-body-overlay">
-//         <Card.Title>Card Title</Card.Title>
-//         <Card.Text>
-//           Some quick example text to build on the card title and make up the
-//           bulk of the card's content.
-//         </Card.Text>
-//         <Button variant="primary">Go somewhere</Button>
-//       </Card.Body>
-//     </Card>
-//   );
-// }
-
-// export default CustomCard;
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -43,7 +20,7 @@ function ThreeCards() {
       <Row className="g-4 justify-content-center border-0">
         {cardData.map((card, index) => (
           <Col xs={12} md={6} lg={4} key={index}>
-            <Card className="border-0 w-100">
+            <Card className="border-0 w-100 p-lg-0 p-3 pt-1">
               <Card.Img variant="top" src={card.image} />
               {/* <Card.Body>
                 <Card.Title>{card.title}</Card.Title>
