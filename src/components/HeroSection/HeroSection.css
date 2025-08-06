@@ -1,7 +1,6 @@
 .hero-background {
   position: relative;
   height: 500px;
-
   margin-bottom: 5rem;
   transition: background-color 1s ease;
 }
@@ -108,38 +107,6 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.hero-overlay p {
-  color: #000000;
-  text-align: center;
-  z-index: 3;
-  padding: 0 20px;
-  margin: 0;
-  font-weight: 700;
-  font-size: 15px;
-}
-
-@media (max-width: 768px) {
-  .hero-section {
-    height: 200px;
-    left: 0rem;
-    width: 100%;
-  }
-
-  .hero-background {
-    height: 145px;
-  }
-
-  .hero-overlay {
-    top: 30rem;
-    height: 5%;
-  }
-
-  .dot {
-    width: 5px;
-    height: 5px;
-  }
-}
-
 .arrow {
   position: absolute;
   top: 50%;
@@ -181,36 +148,178 @@
   opacity: 1;
 }
 
-@media (max-width: 480px) {
+/* Tablet Landscape - Large tablets and small desktops */
+@media screen and (min-width: 1201px) and (max-width: 1600px) {
   .hero-section {
-    height: 150px;
+    width: 1200px;
+    height: 480px;
+    left: 8rem;
   }
-
   .hero-background {
-    height: 110px;
+    height: 450px;
   }
-
   .hero-overlay {
-    height: 3%;
-    top: 27rem;
+    top: 47rem;
+    height: 10%;
   }
-  .arrow {
-    width: 20px;
-    height: 20px;
+  .arrow.left {
+    left: 3rem;
+  }
+  .arrow.right {
+    right: 3rem;
   }
 }
 
-@media screen and (min-width: 750px) and (max-width: 1200px) {
-  .hero-section {
-    width: 895px;
-    height: 300px;
-    left: 0rem;
-  }
+/* Tablet and Medium Screens */
+@media screen and (min-width: 751px) and (max-width: 1200px) {
+.hero-section {
+    width: 100%;
+    height: 270px;
+    left: 0;
+    right: 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
   .hero-background {
-    height: 300px;
+    height: 270px;
+    margin-bottom: 3rem;
   }
   .hero-overlay {
-    top: 104rem;
+    top: 34rem;
+    height: 10%;
+  }
+  .hero-overlay p {
+    font-size: 14px;
+  }
+  .arrow.left {
+    left: 1rem;
+  }
+  .arrow.right {
+    right: 1rem;
+  }
+  .arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+}
+
+/* Mobile Landscape and Small Tablets */
+@media screen and (min-width: 481px) and (max-width: 750px) {
+  .hero-section {
+    height: 250px;
+    left: 1rem;
+    right: 1rem;
+    width: calc(100% - 2rem);
+  }
+  .hero-background {
+    height: 250px;
+    margin-bottom: 2rem;
+  }
+  .hero-overlay {
+    top: 31rem;
     height: 8%;
+  }
+  .hero-overlay p {
+    font-size: 13px;
+    padding: 0 15px;
+  }
+  .dots-container {
+    top: 85%;
+    gap: 6px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  .arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+  .arrow.left {
+    left: 0.5rem;
+  }
+  .arrow.right {
+    right: 0.5rem;
+  }
+}
+
+/* Mobile Portrait */
+@media screen and (max-width: 480px) {
+  .hero-section {
+    height: 170px;
+    left: 0rem;
+    right: 0rem;
+    width: calc(100% - 1rem);
+  }
+  .hero-background {
+    height: 170px;
+    margin-bottom: 1.5rem;
+  }
+  .hero-overlay {
+    height: 7%;
+    top: 25.5rem;
+  }
+  .hero-overlay p {
+    font-size: 12px;
+    padding: 0 10px;
+    font-weight: 600;
+  }
+  .dots-container {
+    top: 88%;
+    gap: 5px;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  .arrow {
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    padding: 5px;
+  }
+  .arrow.left {
+    left: 0.25rem;
+  }
+  .arrow.right {
+    right: 0.25rem;
+  }
+}
+
+/* Extra Small Mobile */
+@media screen and (max-width: 360px) {
+  .hero-section {
+    height: 180px;
+    left: 0.25rem;
+    right: 0.25rem;
+    width: calc(100% - 0.5rem);
+  }
+  .hero-background {
+    height: 180px;
+    margin-bottom: 1rem;
+  }
+  .hero-overlay {
+    top: 17rem;
+    height: 4%;
+  }
+  .hero-overlay p {
+    font-size: 11px;
+    padding: 0 8px;
+  }
+  .dots-container {
+    gap: 4px;
+  }
+  .dot {
+    width: 5px;
+    height: 5px;
+  }
+  .arrow {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
   }
 }
