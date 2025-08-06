@@ -78,8 +78,8 @@ const CartDetailsPage = () => {
   return (
     <Container fluid className="py-4" style={{ maxWidth: "1600px" }}>
       <Row>
-        {/* Left Column - Thumbnail Images */}
-        <div className="col-sm-2 pe-2 p-0 d-lg-block d-none">
+        {/* Left Column - Thumbnail Images (Desktop Only) */}
+        <div className="col-xl-2 pe-2 p-0 d-xl-block d-none">
           <div className="d-flex flex-column gap-2">
             {loading
               ? Array.from({ length: 3 }).map((_, idx) => (
@@ -110,27 +110,29 @@ const CartDetailsPage = () => {
                 ))}
           </div>
         </div>
+
         {/* Middle Column - Main Product Image */}
-        <div className="col-sm-5 px-2">
+        <div className="col-xl-5 col-lg-6 col-md-12 px-2">
           {loading ? (
             <Skeleton height={800} width="100%" />
           ) : (
             <Card className="border-light">
               <Card.Img
-              className="card-image"
+                className="card-image"
                 variant="top"
                 src={productImages[selectedImage]?.image || card2}
                 alt="Main product view"
-                // style={{ height: "800px", objectFit: "cover" }}
               />
             </Card>
           )}
         </div>
-         <div className="col-sm-2 pe-2 p-0 d-lg-none d-sm-block">
-          <div className="d-flex">
+
+        {/* Thumbnail Images for Tablet and Mobile (Bottom placement) */}
+        <div className="col-12 d-xl-none d-block mt-3 order-lg-3 order-md-3">
+          <div className="d-flex justify-content-center gap-2 flex-wrap">
             {loading
               ? Array.from({ length: 3 }).map((_, idx) => (
-                  <Skeleton key={idx} height={180} width="100%" />
+                  <Skeleton key={idx} height={100} width={100} />
                 ))
               : productImages.map((img, idx) => (
                   <div
@@ -138,27 +140,33 @@ const CartDetailsPage = () => {
                     className={`cursor-pointer ${
                       selectedImage === idx ? "" : ""
                     }`}
-                    onMouseEnter={() => setSelectedImage(idx)}
+                    onClick={() => setSelectedImage(idx)}
                     style={{ cursor: "pointer", overflow: "hidden" }}
                   >
                     <img
                       src={img.image || card2}
                       alt={`Thumbnail ${idx}`}
-                      className={`img-fluid p-3 thumbnail-image ${
+                      className={`img-fluid p-2 thumbnail-image ${
                         selectedImage !== idx ? "blurred" : ""
                       }`}
                       style={{
                         height: "100px",
-                        width: "100%",
-                        objectFit: "contain",
+                        width: "100px",
+                        objectFit: "cover",
+                        border:
+                          selectedImage === idx
+                            ? "2px solid #ffd60a"
+                            : "2px solid transparent",
+                        borderRadius: "8px",
                       }}
                     />
                   </div>
                 ))}
           </div>
         </div>
+
         {/* Right Column - Product Details */}
-        <div className="col-sm-5 ps-4 mt-2">
+        <div className="col-xl-5 col-lg-6 col-md-12 ps-4 mt-2 order-lg-2 order-md-2">
           {loading ? (
             <>
               <Skeleton height={20} width={200} />
@@ -288,6 +296,7 @@ const CartDetailsPage = () => {
           )}
         </div>
       </Row>
+
       <Row className="mt-5">
         <Col xs={12}>
           {loading ? (

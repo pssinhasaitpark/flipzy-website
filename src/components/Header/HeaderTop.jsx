@@ -7,6 +7,18 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const SampleNextArrow = ({ className, style, onClick }) => {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Adjust arrow size based on screen width
+  const arrowSize = screenWidth <= 480 ? 40 : screenWidth <= 768 ? 40 : 50;
+  const containerSize = screenWidth <= 480 ? 40 : screenWidth <= 768 ? 40 : 50;
+
   return (
     <div
       className={className}
@@ -15,11 +27,14 @@ const SampleNextArrow = ({ className, style, onClick }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        right: "10px", // bring arrows inside container
+        right: screenWidth <= 480 ? "2px" : screenWidth <= 768 ? "5px" : "10px",
         zIndex: 10,
         cursor: "pointer",
-        width: "30px",
-        height: "30px",
+        width: `${containerSize}px`,
+        height: `${containerSize}px`,
+        // backgroundColor: "rgba(255, 255, 255, 0.9)",
+        borderRadius: "50%",
+        // boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       }}
       onClick={onClick}
       aria-label="Next"
@@ -27,12 +42,12 @@ const SampleNextArrow = ({ className, style, onClick }) => {
       tabIndex={0}
     >
       <svg
-        width="24"
-        height="24"
+        width={arrowSize}
+        height={arrowSize}
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#000000" // black color stroke
-        strokeWidth="3"
+        stroke="#000000"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -43,6 +58,18 @@ const SampleNextArrow = ({ className, style, onClick }) => {
 };
 
 const SamplePrevArrow = ({ className, style, onClick }) => {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Adjust arrow size based on screen width
+  const arrowSize = screenWidth <= 480 ? 40 : screenWidth <= 768 ? 40 : 50;
+  const containerSize = screenWidth <= 480 ? 40 : screenWidth <= 768 ? 40 : 50;
+
   return (
     <div
       className={className}
@@ -51,11 +78,12 @@ const SamplePrevArrow = ({ className, style, onClick }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        left: "10px", // bring arrows inside container
+        left: screenWidth <= 480 ? "2px" : screenWidth <= 768 ? "5px" : "10px",
         zIndex: 10,
         cursor: "pointer",
-        width: "30px",
-        height: "30px",
+        width: `${containerSize}px`,
+        height: `${containerSize}px`,
+        borderRadius: "50%",
       }}
       onClick={onClick}
       aria-label="Previous"
@@ -63,12 +91,12 @@ const SamplePrevArrow = ({ className, style, onClick }) => {
       tabIndex={0}
     >
       <svg
-        width="24"
-        height="24"
+        width={arrowSize}
+        height={arrowSize}
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#000000" // black color stroke
-        strokeWidth="3"
+        stroke="#000000"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -84,11 +112,11 @@ const HeaderTop = () => {
   const { data } = useSelector((state) => state.api);
   const categoryData = data[module_action]?.result || [];
 
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1200);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768);
+      setIsLargeScreen(window.innerWidth >= 1200);
     };
 
     handleResize();
@@ -109,32 +137,66 @@ const HeaderTop = () => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     arrows: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    swipeToSlide: true,
+    touchThreshold: 10,
     responsive: [
-       {
-        breakpoint: 1024,
+      {
+        breakpoint: 1200,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 5,
+          slidesToScroll: 1,
         },
       },
-   {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 3,
+      {
+        breakpoint: 1000,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        },
       },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 2,
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
       },
-    },
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 360,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          centerMode: true,
+          centerPadding: "40px",
+        },
+      },
     ],
-    
   };
 
   // Wait for category data before rendering slider to avoid blank screen
@@ -143,52 +205,20 @@ const HeaderTop = () => {
       <div
         className="category-header-top px-3 d-lg-flex"
         style={{
-          minHeight: "90px",
+          minHeight: window.innerWidth <= 480 ? "70px" : "90px",
           background: "#fff",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
- 
+        {/* Loading state or empty state can be added here */}
       </div>
     );
   }
 
   return (
     <div className="category-header-top px-3 d-lg-flex">
-      {isSmallScreen ? (
-        <Slider {...sliderSettings} className="category-list px-4">
-          {categoryData.map((category) => (
-            <div
-              key={category.cat_id}
-              className="category-item"
-              tabIndex={0}
-              role="button"
-            >
-              <div
-                className="category-icon"
-                style={{
-                  background: category.bgColor,
-                }}
-              >
-                <img
-                  src={category.cat_image}
-                  alt={category.cat_name}
-                  className="category-img"
-                />
-              </div>
-              <div
-                className="category-label"
-                style={{
-                  color: category.color,
-                }}
-              >
-                {category.cat_name}
-              </div>
-            </div>
-          ))}
-        </Slider>
-      ) : (
+      {isLargeScreen ? (
         <div className="category-list px-4 d-lg-flex justify-content-center">
           {categoryData.map((category) => (
             <div
@@ -207,6 +237,7 @@ const HeaderTop = () => {
                   src={category.cat_image}
                   alt={category.cat_name}
                   className="category-img"
+                  loading="lazy"
                 />
               </div>
               <div
@@ -220,9 +251,43 @@ const HeaderTop = () => {
             </div>
           ))}
         </div>
+      ) : (
+        <div style={{ width: "100%", position: "relative" }}>
+          <Slider {...sliderSettings} className="category-list px-4">
+            {categoryData.map((category) => (
+              <div key={category.cat_id}>
+                <div
+                  className="category-item"
+                  tabIndex={0}
+                  role="button"
+                >
+                  <div
+                    className="category-icon"
+                    style={{
+                      background: category.bgColor,
+                    }}
+                  >
+                    <img
+                      src={category.cat_image}
+                      alt={category.cat_name}
+                      className="category-img"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div
+                    className="category-label"
+                    style={{
+                      color: category.color,
+                    }}
+                  >
+                    {category.cat_name}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
       )}
-
-   
     </div>
   );
 };

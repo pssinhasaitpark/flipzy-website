@@ -658,6 +658,8 @@ import { fetchModuleData } from "../../redux/slices/apiSlice";
 import { Card } from "react-bootstrap";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import HeaderSeeAll from "../../components/Header/HeaderSeeAll"; // Adjust if needed
 
@@ -672,6 +674,7 @@ const SeeAllPage = () => {
   const [selectedCondition, setSelectedCondition] = useState("anyCondition");
   const [sortOrder, setSortOrder] = useState("default");
   const [showFilter, setShowFilter] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Data from redux
   const { data } = useSelector((state) => state.api);
@@ -754,9 +757,16 @@ const SeeAllPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    setLoading(true);
     dispatch(
       fetchModuleData({ module_action, params: { limit: 1000, page_no: 1 } })
-    );
+    ).then(() => {
+      // Simulate loading delay similar to CartDetailsPage
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    });
   }, [dispatch, module_action]);
 
   useEffect(
@@ -805,68 +815,86 @@ const SeeAllPage = () => {
       <h5 className="mb-3">Filter by</h5>
       <div className="mb-3">
         <h6 className="mb-2">Category</h6>
-        {categoryData.map((cat) => (
-          <div key={cat.cat_id} className="form-check mb-1">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id={`category-${cat.cat_id}`}
-              onChange={(e) =>
-                handleCategoryChange(cat.cat_name, e.target.checked)
-              }
-              checked={selectedCategories.includes(cat.cat_name)}
-            />
-            <label
-              className="form-check-label"
-              htmlFor={`category-${cat.cat_id}`}
-            >
-              {cat.cat_name}
-            </label>
-          </div>
-        ))}
+        {loading
+          ? Array.from({ length: 5 }).map((_, idx) => (
+              <div key={idx} className="mb-2">
+                <Skeleton height={20} width="80%" />
+              </div>
+            ))
+          : categoryData.map((cat) => (
+              <div key={cat.cat_id} className="form-check mb-1">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id={`category-${cat.cat_id}`}
+                  onChange={(e) =>
+                    handleCategoryChange(cat.cat_name, e.target.checked)
+                  }
+                  checked={selectedCategories.includes(cat.cat_name)}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor={`category-${cat.cat_id}`}
+                >
+                  {cat.cat_name}
+                </label>
+              </div>
+            ))}
       </div>
 
       <div className="mb-3">
         <h6 className="mb-2">Status</h6>
-        {["any", "available", "sold"].map((status) => (
-          <div className="form-check form-check-inline mb-1" key={status}>
-            <input
-              type="radio"
-              className="form-check-input"
-              name="status"
-              id={status}
-              checked={selectedStatus === status}
-              onChange={() => handleStatusChange(status)}
-            />
-            <label className="form-check-label" htmlFor={status}>
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </label>
-          </div>
-        ))}
+        {loading
+          ? Array.from({ length: 3 }).map((_, idx) => (
+              <div key={idx} className="mb-2">
+                <Skeleton height={20} width="60%" />
+              </div>
+            ))
+          : ["any", "available", "sold"].map((status) => (
+              <div className="form-check form-check-inline mb-1" key={status}>
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  name="status"
+                  id={status}
+                  checked={selectedStatus === status}
+                  onChange={() => handleStatusChange(status)}
+                />
+                <label className="form-check-label" htmlFor={status}>
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                </label>
+              </div>
+            ))}
       </div>
 
       <div className="mb-3">
         <h6 className="mb-2">Condition</h6>
-        {["anyCondition", "new", "like new", "good", "used"].map((cond) => (
-          <div className="form-check form-check-inline mb-1" key={cond}>
-            <input
-              type="radio"
-              className="form-check-input"
-              name="condition"
-              id={cond}
-              checked={selectedCondition === cond}
-              onChange={() => handleConditionChange(cond)}
-            />
-            <label className="form-check-label" htmlFor={cond}>
-              {cond === "anyCondition"
-                ? "Any"
-                : cond
-                    .split(" ")
-                    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                    .join(" ")}
-            </label>
-          </div>
-        ))}
+        {loading
+          ? Array.from({ length: 5 }).map((_, idx) => (
+              <div key={idx} className="mb-2">
+                <Skeleton height={20} width="70%" />
+              </div>
+            ))
+          : ["anyCondition", "new", "like new", "good", "used"].map((cond) => (
+              <div className="form-check form-check-inline mb-1" key={cond}>
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  name="condition"
+                  id={cond}
+                  checked={selectedCondition === cond}
+                  onChange={() => handleConditionChange(cond)}
+                />
+                <label className="form-check-label" htmlFor={cond}>
+                  {cond === "anyCondition"
+                    ? "Any"
+                    : cond
+                        .split(" ")
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(" ")}
+                </label>
+              </div>
+            ))}
       </div>
     </div>
   );
@@ -934,76 +962,138 @@ const SeeAllPage = () => {
                   className="d-flex align-items-start flex-wrap"
                   style={{ gap: 16 }}
                 >
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDisabled"
-                      id="flexRadioDisabled"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDisabled"
-                    >
-                      All
-                    </label>
-                  </div>
-                  <div className="form-check mx-3">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDisabled"
-                      id="flexRadioDisabled2"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDisabled2"
-                    >
-                      Free Coins
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDisabled"
-                      id="flexRadioCheckedDisabled"
-                    />
-                    <label
-                      className="form-check-label mx-2"
-                      htmlFor="flexRadioCheckedDisabled"
-                    >
-                      Cash Deals
-                    </label>
-                  </div>
+                  {loading ? (
+                    <div className="d-flex gap-4">
+                      <Skeleton height={20} width={50} />
+                      <Skeleton height={20} width={80} />
+                      <Skeleton height={20} width={70} />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="flexRadioDisabled"
+                          id="flexRadioDisabled"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexRadioDisabled"
+                        >
+                          All
+                        </label>
+                      </div>
+                      <div className="form-check mx-3">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="flexRadioDisabled"
+                          id="flexRadioDisabled2"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="flexRadioDisabled2"
+                        >
+                          Free Coins
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="flexRadioDisabled"
+                          id="flexRadioCheckedDisabled"
+                        />
+                        <label
+                          className="form-check-label mx-2"
+                          htmlFor="flexRadioCheckedDisabled"
+                        >
+                          Cash Deals
+                        </label>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                <select
-                  className="form-select"
-                  style={{ width: 180, minWidth: 100, maxWidth: "97vw" }}
-                  value={sortOrder}
-                  onChange={handleSortChange}
-                >
-                  <option value="default">Sort by default</option>
-                  <option value="lowToHigh">Price: Low to High</option>
-                  <option value="highToLow">Price: High to Low</option>
-                </select>
+                {loading ? (
+                  <Skeleton height={38} width={180} />
+                ) : (
+                  <select
+                    className="form-select"
+                    style={{ width: 180, minWidth: 100, maxWidth: "97vw" }}
+                    value={sortOrder}
+                    onChange={handleSortChange}
+                  >
+                    <option value="default">Sort by default</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                  </select>
+                )}
               </div>
 
               {/* Results summary */}
               <div className="mb-3">
-                <p className="text-muted">
-                  Showing {currentPageItems.length} of {totalFilteredItems}{" "}
-                  results
-                  {selectedCategories.length > 0 && (
-                    <span> for: {selectedCategories.join(", ")}</span>
-                  )}
-                </p>
+                {loading ? (
+                  <Skeleton height={20} width={300} />
+                ) : (
+                  <p className="text-muted">
+                    Showing {currentPageItems.length} of {totalFilteredItems}{" "}
+                    results
+                    {selectedCategories.length > 0 && (
+                      <span> for: {selectedCategories.join(", ")}</span>
+                    )}
+                  </p>
+                )}
               </div>
 
               {/* Products grid */}
               <div className="row">
-                {currentPageItems.length > 0 ? (
+                {loading ? (
+                  // Skeleton loading for products
+                  Array.from({ length: 20 }).map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+                    >
+                      <Card
+                        className="h-100 border-0"
+                        style={{
+                          borderRadius: "10px",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                        }}
+                      >
+                        <Skeleton height={200} />
+                        <Card.Body className="px-3 py-2">
+                          <Skeleton height={20} className="mb-2" />
+                          <Skeleton height={15} width="60%" className="mb-2" />
+                          <div className="d-flex align-items-center">
+                            <Skeleton height={20} width={80} className="me-2" />
+                            <Skeleton height={15} width={60} />
+                          </div>
+                          <div className="pt-3">
+                            <Skeleton
+                              height={15}
+                              width="50%"
+                              className="mb-2"
+                            />
+                            <div className="d-flex">
+                              {[...Array(5)].map((_, i) => (
+                                <Skeleton
+                                  key={i}
+                                  height={16}
+                                  width={16}
+                                  circle
+                                  className="me-1"
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  ))
+                ) : currentPageItems.length > 0 ? (
                   currentPageItems.map((item, idx) => (
                     <div
                       key={item.id || idx}
@@ -1197,7 +1287,7 @@ const SeeAllPage = () => {
               </div>
 
               {/* Pagination */}
-              {totalPages > 1 && (
+              {!loading && totalPages > 1 && (
                 <div className="d-flex justify-content-center mt-4">
                   <ul
                     className="pagination"
