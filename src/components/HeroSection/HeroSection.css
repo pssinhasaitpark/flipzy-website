@@ -293,18 +293,18 @@
 /* Extra Small Mobile */
 @media screen and (max-width: 360px) {
   .hero-section {
-    height: 180px;
+    height: 130px;
     left: 0.25rem;
     right: 0.25rem;
     width: calc(100% - 0.5rem);
   }
   .hero-background {
-    height: 180px;
+    height: 130px;
     margin-bottom: 1rem;
   }
   .hero-overlay {
-    top: 17rem;
-    height: 4%;
+    top: 23rem;
+    height: 8%;
   }
   .hero-overlay p {
     font-size: 11px;

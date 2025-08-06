@@ -10,4 +10,5 @@ import Cards from "./cards/Cards.jsx"
 import ReviewSlider from "./ReviewSlider/ReviewSlider.jsx"
 import HeroSection from "./HeroSection/HeroSection.jsx"
 import DownloadQR from "./downloadQRComponent/DownloadQR.jsx"
-export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,HeaderSeeAll}
+import OurMission from "./aboutUsComponent/OurMission.jsx";
+export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,HeaderSeeAll,OurMission}
