@@ -1,11 +1,15 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import {
+  BadgeAboutUs,
+  CardsDetailComponent,
   DownloadQR,
   Footer,
   FooterBottom,
   Header,
+  OurImpact,
   OurMission,
+  SliderAboutUs,
 } from "../components";
 
 const AboutUsLayout = () => {
@@ -20,7 +24,11 @@ const AboutUsLayout = () => {
         />
 
         <OurMission />
+        <CardsDetailComponent />
+        <BadgeAboutUs />
+     <OurImpact/>
       </Container>
+         <SliderAboutUs />
       <DownloadQR />
       <Footer />
       <FooterBottom />

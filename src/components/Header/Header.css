@@ -32,7 +32,7 @@
 .nav {
   position: relative;
 }
-
+/* 
 .underline {
   position: absolute;
   bottom: 0;
@@ -40,12 +40,13 @@
   height: 3px;
   background-color: #00c853;
   transition: all 0.3s ease;
-}
+} */
 
-.search-bar {
+/* .search-bar {
   top: 7px;
   right: 13px;
-}
+} */
+
 .search-all {
   width: 1500px;
 }

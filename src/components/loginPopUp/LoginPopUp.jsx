@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-
+import { logo } from "../../assets/index";
 const LoginPopup = ({ isOpen, onClose }) => {
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileNumber, setMobileNumber] = useState("");
 
   const handleLogin = () => {
     if (mobileNumber.length >= 10) {
       alert(`Login initiated for: +91 ${mobileNumber}`);
       // Handle your login logic here
       onClose();
-      setMobileNumber('');
+      setMobileNumber("");
     } else {
-      alert('Please enter a valid mobile number');
+      alert("Please enter a valid mobile number");
     }
   };
 
@@ -42,16 +42,16 @@ const LoginPopup = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex  justify-content-center "
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 1050
+        // backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 1050,
       }}
       onClick={handleOverlayClick}
     >
       <div
-        className="bg-white rounded-4 position-relative overflow-hidden shadow-lg"
-        style={{ maxWidth: '400px', width: '90%' }}
+        className="bg-white rounded-4 position-relative overflow-hidden shadow-lg "
+        style={{ maxWidth: "500px", height: "550px", width: "90%" }}
       >
         {/* Close button */}
         <button
@@ -63,9 +63,9 @@ const LoginPopup = ({ isOpen, onClose }) => {
         </button>
 
         {/* Header with logo */}
-        <div className="text-center pt-4 pb-3">
-          <div className="d-flex align-items-center justify-content-center mb-2">
-            <div
+        <div className="text-center pt-5 pb-3">
+          <div className="d-flex align-items-center justify-content-center mb-3">
+            {/* <div
               className="rounded-circle d-flex align-items-center justify-content-center me-2"
               style={{
                 width: '32px',
@@ -75,16 +75,21 @@ const LoginPopup = ({ isOpen, onClose }) => {
             >
               <span className="text-dark fw-bold">T</span>
             </div>
-            <span className="fs-5 fw-bold text-dark">TreeUp</span>
+            <span className="fs-5 fw-bold text-dark">TreeUp</span> */}
+            <div>
+              <img src={logo} alt="" className="w-25" />
+            </div>
           </div>
-          <p className="text-muted small fw-medium mb-0">India's #1 Online Resale Platform</p>
+          <p className="text-muted small fw-medium mb-0">
+            India's #1 Online Resale Platform
+          </p>
         </div>
 
         {/* Promotional banner */}
         <div
           className="mx-3 rounded-3 p-4 mb-4 position-relative overflow-hidden"
           style={{
-            background: 'linear-gradient(to right, #fef3c7, #fce7f3)'
+            background: "linear-gradient(to right, #fef3c7, #fce7f3)",
           }}
         >
           <div className="d-flex align-items-center justify-content-between">
@@ -98,16 +103,17 @@ const LoginPopup = ({ isOpen, onClose }) => {
             <div
               className="d-flex align-items-center justify-content-center ms-3 rounded-circle"
               style={{
-                width: '80px',
-                height: '80px',
-                background: 'linear-gradient(to bottom right, #f9a8d4, #ec4899)'
+                width: "80px",
+                height: "80px",
+                background:
+                  "linear-gradient(to bottom right, #f9a8d4, #ec4899)",
               }}
             >
               <div
                 className="bg-white rounded-circle d-flex align-items-center justify-content-center"
-                style={{ width: '60px', height: '60px' }}
+                style={{ width: "60px", height: "60px" }}
               >
-                <span style={{ fontSize: '24px' }}>👋</span>
+                <span style={{ fontSize: "24px" }}>👋</span>
               </div>
             </div>
           </div>
@@ -120,32 +126,39 @@ const LoginPopup = ({ isOpen, onClose }) => {
               <div className="px-3 py-3 bg-light border-end">
                 <span className="text-muted fw-medium">+91</span>
               </div>
+              <div className="px-2 py-2  ">
+
               <input
                 type="tel"
                 value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                onChange={(e) =>
+                  setMobileNumber(
+                    e.target.value.replace(/\D/g, "").slice(0, 10)
+                  )
+                }
                 placeholder="Mobile Number*"
-                className="form-control border-0 shadow-none"
-                style={{ outline: 'none' }}
+                className="form-control border-0 shadow-none "
+                style={{ outline: "none" }}
               />
+            </div>
             </div>
           </div>
           <button
             onClick={handleLogin}
-            className="btn w-100 fw-semibold py-3 border-0 shadow-sm"
-            style={{ backgroundColor: '#fbbf24', color: '#000' }}
+            className="btn w-100 fw-semibold py-3 pt-2 border-0 shadow-sm"
+            style={{ backgroundColor: "#fbbf24", color: "#000" }}
           >
             Login
           </button>
 
           {/* Terms and privacy */}
-          <div className="mt-3 text-center">
+          <div className="mt-3 text-center pt-4">
             <p className="small text-muted mb-0">
-              We don't spam. By creating an account, you agree to{' '}
+              We don't spam. By creating an account, you agree to{" "}
               <a href="#" className="text-primary text-decoration-none">
                 TreeUp's Terms
-              </a>{' '}
-              and{' '}
+              </a>{" "}
+              and{" "}
               <a href="#" className="text-primary text-decoration-none">
                 Privacy Policy
               </a>

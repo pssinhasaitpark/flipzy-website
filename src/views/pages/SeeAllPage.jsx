@@ -759,7 +759,7 @@ const SeeAllPage = () => {
   useEffect(() => {
     setLoading(true);
     dispatch(
-      fetchModuleData({ module_action, params: { limit: 1000, page_no: 1 } })
+      fetchModuleData({ module_action})
     ).then(() => {
       // Simulate loading delay similar to CartDetailsPage
       const timer = setTimeout(() => {

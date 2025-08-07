@@ -85,7 +85,7 @@ import { mobile, qrCode } from "../../assets";
 
 const MobileAppPromo = () => {
   return (
-    <div className="w-100" style={{ backgroundColor: "#F4D03F" }}>
+    <div className="w-100" style={{ backgroundColor: "#66e48c" }}>
       <div className="container">
         <div className="row align-items-center gap-4">
           {/* Left Section - Mobile Phones */}

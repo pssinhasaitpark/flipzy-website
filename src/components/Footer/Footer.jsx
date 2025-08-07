@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../assets/images/flipzy_online_store.png";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="text-light py-5" style={{ backgroundColor: "#212121" }}>
@@ -74,73 +75,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Popular Brands Column */}
-          {/* <div className="col-md-2 mb-4">
-            <h6 className="text-warning mb-3 fw-bold">Popular Brands</h6>
-            <ul className="list-unstyled">
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Zara
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Mamaearth
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Shein
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Biba
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Avaasa
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Babyhug
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  H&M
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Forever 21
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Max
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Urbanic
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Zudio
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  MyGlamm
-                </a>
-              </li>
-            </ul>
-          </div> */}
-
           {/* Company Column */}
           <div className="col-md-2 mb-4">
             <h6 className="text-warning mb-3 fw-bold">Company</h6>
@@ -180,14 +114,14 @@ const Footer = () => {
             <h6 className="text-warning mb-3 fw-bold">Policies</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
+                <Link to="/terms-n-condition" className="text-light text-decoration-none">
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
+                <Link to="/privacy-policy" className="text-light text-decoration-none">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
