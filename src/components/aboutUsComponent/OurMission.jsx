@@ -3,7 +3,7 @@ import { Card, Col, Row } from "react-bootstrap";
 
 const OurMission = () => {
   return (
-    <div>
+    <div className="container ">
       {/* Mission Section */}
       <Row className="justify-content-center mb-5">
         <Col lg={8} md={10}>
@@ -16,7 +16,7 @@ const OurMission = () => {
                   style={{
                     width: "60px",
                     height: "3px",
-                    backgroundColor: "#ffd700",
+                    backgroundColor: "#00c853",
                   }}
                 ></div>
               </div>
@@ -53,7 +53,15 @@ const OurMission = () => {
           />
         </Col>
       </Row>
-      <div className=" d-flex justify-content-center  mb-5 bg-warning p-4 rounded">
+      <div
+        className=" d-flex justify-content-center  mb-5 bg-warning p-4 "
+        style={{
+          background:
+            "linear-gradient(135deg, #A8E6CF 0%, #7FCDCD 50%, #81C784 100%)",
+
+          borderRadius: "20px",
+        }}
+      >
         <div className="text-left">
           Adoption of a circular economy in India will result in yearly benefits
           of $624 billion by 2050<br></br> and a 44% reduction in greenhouse gas

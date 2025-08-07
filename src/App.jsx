@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage,CartDetailsLayout,SeeAllPageLayout,AboutUsLayout } from "./layouts/index";
 import "./App.css";
+import { PrivacyPolicy, TermsNCondition } from "./views/pages";
 // import SeeAllPage from "./views/pages/SeeAllPage";
 // import { CartDetails } from "./views/pages";
 const App = () => {
@@ -10,8 +11,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/aboutus" element={<AboutUsLayout />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-n-condition" element={<TermsNCondition />} />
         <Route path="/cartDetails/:name/:id" element={<CartDetailsLayout />} />
         <Route path="/seeall/:module_action" element={<SeeAllPageLayout />} />
+
       </Routes>
     </BrowserRouter>
   );

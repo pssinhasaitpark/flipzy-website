@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { fetchModuleData } from "../../redux/slices/apiSlice";
-import './Header.css'
+import "./Header.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -108,6 +109,7 @@ const SamplePrevArrow = ({ className, style, onClick }) => {
 
 const HeaderTop = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const module_action = "category";
   const { data } = useSelector((state) => state.api);
   const categoryData = data[module_action]?.result || [];
@@ -132,6 +134,21 @@ const HeaderTop = () => {
       })
     );
   }, [dispatch]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCategoryClick = (category) => {
+    // Navigate to see all page with products module_action and pass category info
+    navigate(`/seeall/products`, {
+      state: {
+        selectedCategory: category.cat_name,
+        categoryId: category.cat_id,
+      },
+    });
+    scrollToTop();
+  };
 
   const sliderSettings = {
     dots: false,
@@ -226,6 +243,13 @@ const HeaderTop = () => {
               className="category-item"
               tabIndex={0}
               role="button"
+              onClick={() => handleCategoryClick(category)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleCategoryClick(category);
+                }
+              }}
+              style={{ cursor: "pointer" }}
             >
               <div
                 className="category-icon"
@@ -260,6 +284,13 @@ const HeaderTop = () => {
                   className="category-item"
                   tabIndex={0}
                   role="button"
+                  onClick={() => handleCategoryClick(category)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      handleCategoryClick(category);
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
                 >
                   <div
                     className="category-icon"

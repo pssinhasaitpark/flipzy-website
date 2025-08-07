@@ -23,9 +23,13 @@ body {
   max-height: 130px;
   width: 100%;
 }
-.review-slider{
+.review-slider {
   width: 12%;
 }
 .vertical-slider .carousel .slide {
   background: transparent;
+}
+
+* {
+  font-family: DMSerifDisplayR !important;
 }
