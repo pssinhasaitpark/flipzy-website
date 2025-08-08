@@ -12,7 +12,7 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/aboutus" element={<AboutUsLayout />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-n-condition" element={<TermsNCondition />} />
+        <Route path="/terms-and-condition" element={<TermsNCondition />} />
         <Route path="/cartDetails/:name/:id" element={<CartDetailsLayout />} />
         <Route path="/seeall/:module_action" element={<SeeAllPageLayout />} />
 

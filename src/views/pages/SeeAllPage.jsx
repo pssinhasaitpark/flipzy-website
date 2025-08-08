@@ -656,16 +656,140 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchModuleData } from "../../redux/slices/apiSlice";
 import { Card } from "react-bootstrap";
-import { FaRegStar, FaStar } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { FaRegStar, FaStar, FaSearch, FaBars } from "react-icons/fa";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import logo from "../../assets/images/shortLogo.png";
 
-import HeaderSeeAll from "../../components/Header/HeaderSeeAll"; // Adjust if needed
+const HeaderSeeAll = ({
+  onShowFilter,
+  onSearch,
+  searchQuery,
+  onClearSearch,
+}) => {
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    onSearch(query);
+  };
+
+  const handleClearSearch = () => {
+    onClearSearch();
+  };
+
+  return (
+    <nav
+      className="navbar navbar-expand-lg navbar-light bg-white"
+      style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
+    >
+      <div className="container-fluid">
+        <div
+          className="d-flex align-items-center w-100"
+          style={{ minHeight: "60px" }}
+        >
+          <a
+            className="navbar-brand flex-shrink-0 me-2"
+            href="/"
+            style={{ minWidth: "auto" }}
+          >
+            <img
+              src={logo}
+              height="40"
+              className="d-inline-block align-top"
+              alt="Logo"
+            />
+          </a>
+          <form
+            className="flex-grow-1 position-relative mx-2"
+            style={{ minWidth: "150px", maxWidth: "calc(100% - 120px)" }}
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <input
+              className="form-control rounded-pill bg-light search-all w-100"
+              type="search"
+              placeholder="Search for anything"
+              aria-label="Search"
+              style={{
+                paddingRight: "45px",
+                fontSize: "14px",
+                height: "40px",
+              }}
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                className="position-absolute btn btn-link text-decoration-none"
+                style={{
+                  right: 40,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+                onClick={handleClearSearch}
+              >
+                &times;
+              </button>
+            )}
+            <span
+              className="position-absolute search-bar"
+              style={{
+                right: 12,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+              }}
+            >
+              <FaSearch size={16} />
+            </span>
+          </form>
+          <div className="flex-shrink-0" style={{ minWidth: "50px" }}>
+            <button
+              className="btn d-lg-none p-2"
+              style={{
+                background: "transparent",
+                boxShadow: "none",
+                border: "none",
+                outline: "none",
+                fontSize: "24px",
+                color: "#111",
+                width: "44px",
+                height: "44px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={onShowFilter}
+              aria-label="Open Filters"
+            >
+              <FaBars />
+            </button>
+            <button
+              className="btn d-none d-lg-block px-3"
+              style={{
+                fontWeight: "800",
+                whiteSpace: "nowrap",
+                fontSize: "14px",
+              }}
+              type="button"
+            >
+              Get the app
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
 const SeeAllPage = () => {
   const { module_action } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
+
+  // Get search query from URL params
+  const searchParams = new URLSearchParams(location.search);
+  const urlSearchQuery = searchParams.get("search") || "";
 
   // States
   const [pageNo, setPageNo] = useState(1);
@@ -675,28 +799,80 @@ const SeeAllPage = () => {
   const [sortOrder, setSortOrder] = useState("default");
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(urlSearchQuery);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   // Data from redux
   const { data } = useSelector((state) => state.api);
   const allItems = data[module_action]?.product || [];
   const categoryData = data["category"]?.result || [];
 
-  // Filters logic
+  // Handle category selection from navigation state
+  useEffect(() => {
+    if (location.state?.selectedCategory) {
+      setSelectedCategories([location.state.selectedCategory]);
+    }
+  }, [location.state]);
+
+  // Update search query when URL changes
+  useEffect(() => {
+    setSearchQuery(urlSearchQuery);
+  }, [urlSearchQuery]);
+
+  // Fetch categories on mount
+  useEffect(() => {
+    dispatch(fetchModuleData({ module_action: "category" }));
+  }, [dispatch]);
+
+  // Fetch initial data with search query if present
+  useEffect(() => {
+    setLoading(true);
+    const params = { limit: 1000, page_no: 1 };
+
+    // If there's a search query, add it to params
+    if (urlSearchQuery.trim()) {
+      params.search = urlSearchQuery.trim();
+    }
+
+    dispatch(
+      fetchModuleData({
+        module_action,
+        params,
+      })
+    ).then(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    });
+  }, [dispatch, module_action, urlSearchQuery]);
+
+  // Local filtering (after API data is received)
   const filteredItems = useMemo(() => {
-    if (selectedCategories.length === 0) return allItems;
-    return allItems.filter((item) =>
-      selectedCategories.includes(item.cat_name)
-    );
+    let items = allItems;
+
+    // Category filter
+    if (selectedCategories.length > 0) {
+      items = items.filter((item) =>
+        selectedCategories.includes(item.cat_name)
+      );
+    }
+
+    return items;
   }, [allItems, selectedCategories]);
 
   const finalFilteredItems = useMemo(() => {
     let items = filteredItems;
+
+    // Status filter
     if (selectedStatus !== "any") {
       items =
         selectedStatus === "available"
           ? items.filter((item) => item.is_sold === "0")
           : items.filter((item) => item.is_sold === "1");
     }
+
+    // Condition filter
     if (selectedCondition !== "anyCondition") {
       items = items.filter(
         (item) =>
@@ -704,19 +880,21 @@ const SeeAllPage = () => {
           item.condition.toLowerCase() === selectedCondition.toLowerCase()
       );
     }
+
     return items;
   }, [filteredItems, selectedStatus, selectedCondition]);
 
   const sortedItems = useMemo(() => {
     let items = [...finalFilteredItems];
-    if (sortOrder === "lowToHigh")
+    if (sortOrder === "lowToHigh") {
       items.sort(
         (a, b) => parseFloat(a.selling_price) - parseFloat(b.selling_price)
       );
-    else if (sortOrder === "highToLow")
+    } else if (sortOrder === "highToLow") {
       items.sort(
         (a, b) => parseFloat(b.selling_price) - parseFloat(a.selling_price)
       );
+    }
     return items;
   }, [finalFilteredItems, sortOrder]);
 
@@ -751,28 +929,16 @@ const SeeAllPage = () => {
     return pages;
   }, [pageNo, totalPages, pageNeighbours]);
 
-  // Fetch data actions
+  // Reset page when filters change
   useEffect(() => {
-    dispatch(fetchModuleData({ module_action: "category" }));
-  }, [dispatch]);
-
-  useEffect(() => {
-    setLoading(true);
-    dispatch(
-      fetchModuleData({ module_action})
-    ).then(() => {
-      // Simulate loading delay similar to CartDetailsPage
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-    });
-  }, [dispatch, module_action]);
-
-  useEffect(
-    () => setPageNo(1),
-    [selectedCategories, selectedStatus, selectedCondition, sortOrder]
-  );
+    setPageNo(1);
+  }, [
+    selectedCategories,
+    selectedStatus,
+    selectedCondition,
+    sortOrder,
+    searchQuery,
+  ]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -783,11 +949,13 @@ const SeeAllPage = () => {
 
   // Filter handlers with auto close on mobile/tablet
   const handleCategoryChange = (categoryName, isChecked) => {
-    if (isChecked) setSelectedCategories((prev) => [...prev, categoryName]);
-    else
+    if (isChecked) {
+      setSelectedCategories((prev) => [...prev, categoryName]);
+    } else {
       setSelectedCategories((prev) =>
         prev.filter((cat) => cat !== categoryName)
       );
+    }
     closeSidebarIfMobile();
   };
 
@@ -803,6 +971,62 @@ const SeeAllPage = () => {
 
   const handleSortChange = (e) => setSortOrder(e.target.value);
 
+  // Updated search handler - makes API call with debouncing
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+
+    // Update URL without full navigation
+    const newUrl = new URL(window.location);
+    if (query.trim()) {
+      newUrl.searchParams.set("search", query);
+    } else {
+      newUrl.searchParams.delete("search");
+    }
+    window.history.pushState({}, "", newUrl);
+
+    // Debounced API call for search
+    if (window.searchTimeout) {
+      clearTimeout(window.searchTimeout);
+    }
+
+    window.searchTimeout = setTimeout(() => {
+      setSearchLoading(true);
+      const params = { limit: 1000, page_no: 1 };
+
+      if (query.trim()) {
+        params.search = query.trim();
+      }
+
+      dispatch(
+        fetchModuleData({
+          module_action,
+          params,
+        })
+      ).then(() => {
+        setSearchLoading(false);
+      });
+    }, 500); // 500ms debounce
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    // Remove search param from URL
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.delete("search");
+    window.history.pushState({}, "", newUrl);
+
+    // Fetch data without search
+    setSearchLoading(true);
+    dispatch(
+      fetchModuleData({
+        module_action,
+        params: { limit: 1000, page_no: 1 },
+      })
+    ).then(() => {
+      setSearchLoading(false);
+    });
+  };
+
   const handlePageClick = (pageNumber) => {
     if (pageNumber !== pageNo && pageNumber >= 1 && pageNumber <= totalPages) {
       setPageNo(pageNumber);
@@ -813,6 +1037,25 @@ const SeeAllPage = () => {
   const FilterContents = (
     <div>
       <h5 className="mb-3">Filter by</h5>
+
+      {/* Search filter indicator */}
+      {searchQuery && (
+        <div className="mb-3 p-2 bg-light rounded">
+          <div className="d-flex justify-content-between align-items-center">
+            <small className="text-muted">
+              Searching for: <strong>"{searchQuery}"</strong>
+            </small>
+            <button
+              className="btn btn-sm btn-outline-secondary"
+              onClick={handleClearSearch}
+              style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mb-3">
         <h6 className="mb-2">Category</h6>
         {loading
@@ -841,7 +1084,6 @@ const SeeAllPage = () => {
               </div>
             ))}
       </div>
-
       <div className="mb-3">
         <h6 className="mb-2">Status</h6>
         {loading
@@ -866,7 +1108,6 @@ const SeeAllPage = () => {
               </div>
             ))}
       </div>
-
       <div className="mb-3">
         <h6 className="mb-2">Condition</h6>
         {loading
@@ -899,11 +1140,17 @@ const SeeAllPage = () => {
     </div>
   );
 
+  const isDataLoading = loading || searchLoading;
+
   return (
     <div>
-      {/* Header with hamburger */}
-      <HeaderSeeAll onShowFilter={() => setShowFilter(true)} />
-
+      {/* Header with hamburger and search */}
+      <HeaderSeeAll
+        onShowFilter={() => setShowFilter(true)}
+        onSearch={handleSearch}
+        searchQuery={searchQuery}
+        onClearSearch={handleClearSearch}
+      />
       <div className="mt-2">
         <div className="container">
           <div className="row">
@@ -957,12 +1204,11 @@ const SeeAllPage = () => {
                 className="d-flex flex-wrap justify-content-between align-items-center mb-3 py-4"
                 style={{ paddingTop: 18, paddingBottom: 10 }}
               >
-                {/* Additional controls here (All, Free Coins, Cash Deals, etc) */}
                 <div
                   className="d-flex align-items-start flex-wrap"
                   style={{ gap: 16 }}
                 >
-                  {loading ? (
+                  {isDataLoading ? (
                     <div className="d-flex gap-4">
                       <Skeleton height={20} width={50} />
                       <Skeleton height={20} width={80} />
@@ -1015,8 +1261,7 @@ const SeeAllPage = () => {
                     </>
                   )}
                 </div>
-
-                {loading ? (
+                {isDataLoading ? (
                   <Skeleton height={38} width={180} />
                 ) : (
                   <select
@@ -1031,25 +1276,32 @@ const SeeAllPage = () => {
                   </select>
                 )}
               </div>
-
               {/* Results summary */}
               <div className="mb-3">
-                {loading ? (
+                {isDataLoading ? (
                   <Skeleton height={20} width={300} />
                 ) : (
                   <p className="text-muted">
                     Showing {currentPageItems.length} of {totalFilteredItems}{" "}
                     results
+                    {searchQuery && (
+                      <span>
+                        {" "}
+                        for search: <strong>"{searchQuery}"</strong>
+                      </span>
+                    )}
                     {selectedCategories.length > 0 && (
-                      <span> for: {selectedCategories.join(", ")}</span>
+                      <span>
+                        {" "}
+                        | Categories: {selectedCategories.join(", ")}
+                      </span>
                     )}
                   </p>
                 )}
               </div>
-
               {/* Products grid */}
               <div className="row">
-                {loading ? (
+                {isDataLoading ? (
                   // Skeleton loading for products
                   Array.from({ length: 20 }).map((_, idx) => (
                     <div
@@ -1277,17 +1529,28 @@ const SeeAllPage = () => {
                 ) : (
                   <div className="col-12 text-center py-5">
                     <h5 className="text-muted">
-                      No products found matching your filters
+                      {searchQuery
+                        ? `No products found for "${searchQuery}"`
+                        : "No products found matching your filters"}
                     </h5>
                     <p className="text-muted">
-                      Try adjusting your filter criteria
+                      {searchQuery
+                        ? "Try searching with different keywords"
+                        : "Try adjusting your filter criteria"}
                     </p>
+                    {searchQuery && (
+                      <button
+                        className="btn btn-primary mt-2"
+                        onClick={handleClearSearch}
+                      >
+                        Clear Search and Show All Products
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
-
               {/* Pagination */}
-              {!loading && totalPages > 1 && (
+              {!isDataLoading && totalPages > 1 && (
                 <div className="d-flex justify-content-center mt-4">
                   <ul
                     className="pagination"
@@ -1308,7 +1571,6 @@ const SeeAllPage = () => {
                         &lt;
                       </button>
                     </li>
-
                     {pageNumbers.map((number, idx) =>
                       number === "left-ellipsis" ||
                       number === "right-ellipsis" ? (
@@ -1341,7 +1603,6 @@ const SeeAllPage = () => {
                         </li>
                       )
                     )}
-
                     <li className="page-item" style={{ margin: "0 5px" }}>
                       <button
                         className="page-link"

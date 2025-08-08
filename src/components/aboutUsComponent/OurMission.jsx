@@ -10,7 +10,7 @@ const OurMission = () => {
           <Card className="border-0 ">
             <Card.Body className="text-center py-5">
               <div className="mb-4">
-                <h2 className="display-6 mb-3 text-black">Our Mission</h2>
+                <h2 className="display-6 mb-3 text-black">Our Vision</h2>
                 <div
                   className=" mx-auto  "
                   style={{
@@ -26,8 +26,9 @@ const OurMission = () => {
                   color: "#2c3e50",
                 }}
               >
-                We are building a sustainable future of commerce that's
-                affordable, trendy & rewarding!
+                To empower individuals to give a second life to their unused
+                products and contribute to a circular economy. We believe in
+                making reuse easy, accessible, and rewarding for everyone.
               </h3>
             </Card.Body>
           </Card>
@@ -38,8 +39,7 @@ const OurMission = () => {
       <Row className="justify-content-center">
         <Col lg={8} md={10}>
           <p className="fs-5 mb-4">
-            Welcome to our About Us page! Here you can learn more about our
-            mission, values, and the team behind our company.
+            We empower people to unlock value from their unused belongings, save money, and promote an eco-friendly way of living by reducing waste and extending the lifecycle of products.
           </p>
           <p className="fs-6">
             We are dedicated to providing the best service and products to our
@@ -63,9 +63,7 @@ const OurMission = () => {
         }}
       >
         <div className="text-left">
-          Adoption of a circular economy in India will result in yearly benefits
-          of $624 billion by 2050<br></br> and a 44% reduction in greenhouse gas
-          emissions.
+          Our mission is simple: make second-hand your first choice
         </div>
       </div>
     </div>

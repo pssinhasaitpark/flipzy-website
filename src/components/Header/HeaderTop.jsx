@@ -141,7 +141,7 @@ const HeaderTop = () => {
 
   const handleCategoryClick = (category) => {
     // Navigate to see all page with products module_action and pass category info
-    navigate(`/seeall/products`, {
+    navigate(`/seeall/manufacturerProducts`, {
       state: {
         selectedCategory: category.cat_name,
         categoryId: category.cat_id,

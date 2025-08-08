@@ -56,8 +56,8 @@ const LoginPopup = ({ isOpen, onClose }) => {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="position-absolute top-0 end-0 m-3 btn btn-light rounded-circle p-2 border-0"
-          style={{ zIndex: 10 }}
+          className="position-absolute btn btn-light rounded-circle p-2 border-0"
+          style={{ right: "15px", top: "10px", zIndex: 10 }}
         >
           <X size={20} />
         </button>
@@ -127,20 +127,19 @@ const LoginPopup = ({ isOpen, onClose }) => {
                 <span className="text-muted fw-medium">+91</span>
               </div>
               <div className="px-2 py-2  ">
-
-              <input
-                type="tel"
-                value={mobileNumber}
-                onChange={(e) =>
-                  setMobileNumber(
-                    e.target.value.replace(/\D/g, "").slice(0, 10)
-                  )
-                }
-                placeholder="Mobile Number*"
-                className="form-control border-0 shadow-none "
-                style={{ outline: "none" }}
-              />
-            </div>
+                <input
+                  type="tel"
+                  value={mobileNumber}
+                  onChange={(e) =>
+                    setMobileNumber(
+                      e.target.value.replace(/\D/g, "").slice(0, 10)
+                    )
+                  }
+                  placeholder="Mobile Number*"
+                  className="form-control border-0 shadow-none "
+                  style={{ outline: "none" }}
+                />
+              </div>
             </div>
           </div>
           <button
@@ -156,7 +155,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
             <p className="small text-muted mb-0">
               We don't spam. By creating an account, you agree to{" "}
               <a href="#" className="text-primary text-decoration-none">
-                TreeUp's Terms
+                Terms and Condition
               </a>{" "}
               and{" "}
               <a href="#" className="text-primary text-decoration-none">
