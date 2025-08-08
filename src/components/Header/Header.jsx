@@ -4,15 +4,17 @@ import { logo } from "../../assets/index";
 import "./Header.css";
 import { FaSearch } from "react-icons/fa";
 import LoginPopup from "../loginPopUp/LoginPopUp";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const CustomNavbar = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
   const loginRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const [underlineStyle, setUnderlineStyle] = useState({
     width: "0px",
     left: "0px",
@@ -80,6 +82,27 @@ const CustomNavbar = () => {
     }
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Navigate to SeeAllPage with 'products' module_action and search query
+      // You can change 'products' to any default module_action you want for search
+      navigate(
+        `/seeall/products?search=${encodeURIComponent(searchQuery.trim())}`
+      );
+    }
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearchSubmit(e);
+    }
+  };
+
   return (
     <>
       <div className="border border-bottom mb-4">
@@ -102,15 +125,25 @@ const CustomNavbar = () => {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Form className="flex-grow-1 mx-3 mt-2 position-relative">
+              <Form
+                className="flex-grow-1 mx-3 mt-2 position-relative"
+                onSubmit={handleSearchSubmit}
+              >
                 <FormControl
                   type="text"
                   placeholder="Search for anything"
                   className="w-100 rounded border-warning"
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  onKeyPress={handleSearchKeyPress}
                 />
-                <span className="position-absolute search-bar">
+                <button
+                  type="submit"
+                  className="position-absolute search-bar border-0 bg-transparent"
+                  style={{ cursor: "pointer" }}
+                >
                   <FaSearch />
-                </span>
+                </button>
               </Form>
               <Nav className="d-flex align-items-center position-relative">
                 <Nav.Link
@@ -159,9 +192,9 @@ const CustomNavbar = () => {
                   className="underline fw-bold position-absolute bottom-0"
                   style={{
                     ...underlineStyle,
-                    transition: "all 0.3s ease-in-out", // Smooth transition
-                    height: "2px", // Make sure underline has height
-                    backgroundColor: "var(--primary-color, #00c853)", // Add color
+                    transition: "all 0.3s ease-in-out",
+                    height: "2px",
+                    backgroundColor: "var(--primary-color, #00c853)",
                   }}
                 ></div>
               </Nav>

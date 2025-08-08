@@ -248,27 +248,33 @@ const CompleteLandingPage = () => {
                         >
                           {getUserInitials(review.name)}
                         </div>
-                        <div className="flex-grow-1" style={{ minWidth: 0 }}>
-                          <h6 className="mb-1 text-white fw-semibold text-truncate">
+                        <div className="flex-grow-1 mx-2" style={{ minWidth: 0 }}>
+                          {/* <h6 className="mb-1 text-white fw-semibold text-truncate">
                             {review.name}
-                          </h6>
-                          <div className="d-flex align-items-center justify-content-between flex-wrap">
+                          </h6> */}
+                           <div className="d-flex align-items-center justify-content-between flex-wrap">
                             <div className="d-flex align-items-center">
-                              {renderStars(review.rating)}
+                             {review.name}
                             </div>
                             <small className="text-light opacity-75 ms-2">
                               {review.date}
                             </small>
                           </div>
+                          <div className="d-flex align-items-center justify-content-between flex-wrap">
+                            <div className="d-flex align-items-center">
+                              {renderStars(review.rating)}
+                            </div>
+                           
+                          </div>
                         </div>
-                        <div className="dropdown flex-shrink-0">
+                        {/* <div className="dropdown flex-shrink-0">
                           <button
                             className="btn btn-link text-light p-0 border-0"
                             style={{ fontSize: "20px", lineHeight: 1 }}
                           >
                             ⋮
                           </button>
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="flex-grow-1 d-flex align-items-start">

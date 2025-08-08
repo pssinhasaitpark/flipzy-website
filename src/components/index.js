@@ -15,4 +15,5 @@ import CardsDetailComponent from "./aboutUsComponent/CardsDetailComponent.jsx";
 import SliderAboutUs from "./aboutUsComponent/SliderAboutUs.jsx";
 import BadgeAboutUs from "./aboutUsComponent/BadgeAboutUs.jsx"
 import OurImpact from "./aboutUsComponent/OurImpact.jsx"
-export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,HeaderSeeAll,OurMission,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact}
+import LoginPopUp from "./loginPopUp/LoginPopUp.jsx"; // Importing the LoginPopUp component
+export {Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact}

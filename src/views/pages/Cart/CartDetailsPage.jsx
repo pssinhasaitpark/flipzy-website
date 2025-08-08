@@ -18,6 +18,7 @@ import { Link, useParams } from "react-router-dom";
 import { fetchModuleData } from "../../../redux/slices/apiSlice";
 import { useLocation } from "react-router-dom";
 import "./CartDetailsPage.css";
+import LoginPopup from "../../../components/loginPopUp/LoginPopUp";
 
 const CartDetailsPage = () => {
   const { id } = useParams();
@@ -28,7 +29,6 @@ const CartDetailsPage = () => {
   const passedProduct = location.state?.product;
   const { data } = useSelector((state) => state.api);
   const [loading, setLoading] = useState(true);
-
   const freshDealsData = data[products]?.product || [];
   const exclusiveProductData = data[exclusiveProducts]?.product || [];
   const allProducts = Array.isArray(data?.products)
@@ -39,6 +39,11 @@ const CartDetailsPage = () => {
   const product =
     allProducts.find((item) => String(item.id) === String(id)) || passedProduct;
   const [selectedImage, setSelectedImage] = useState(0);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+
+  useEffect(() => {
+    console.log("showLoginPopup state updated:", showLoginPopup);
+  }, [showLoginPopup]);
 
   useEffect(() => {
     dispatch(
@@ -51,7 +56,6 @@ const CartDetailsPage = () => {
       fetchModuleData({ module_action: products, params: { limit: 12 } })
     );
 
-    // Simulate a 5-second loading delay
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -63,6 +67,14 @@ const CartDetailsPage = () => {
     console.log("Redux Data after fetch:", data);
     console.log("Matched product:", product);
   }, [data]);
+
+  const handleBuyNowClick = () => {
+    setShowLoginPopup(true);
+  };
+
+  const handleCloseLoginPopup = () => {
+    setShowLoginPopup(false);
+  };
 
   if (!product) {
     console.log("Product not found for ID:", id);
@@ -110,7 +122,6 @@ const CartDetailsPage = () => {
                 ))}
           </div>
         </div>
-
         {/* Middle Column - Main Product Image */}
         <div className="col-xl-5 col-lg-6 col-md-12 px-2">
           {loading ? (
@@ -126,7 +137,6 @@ const CartDetailsPage = () => {
             </Card>
           )}
         </div>
-
         {/* Thumbnail Images for Tablet and Mobile (Bottom placement) */}
         <div className="col-12 d-xl-none d-block mt-3 order-lg-3 order-md-3">
           <div className="d-flex justify-content-center gap-2 flex-wrap">
@@ -164,7 +174,6 @@ const CartDetailsPage = () => {
                 ))}
           </div>
         </div>
-
         {/* Right Column - Product Details */}
         <div className="col-xl-5 col-lg-6 col-md-12 ps-4 mt-2 order-lg-2 order-md-2">
           {loading ? (
@@ -247,13 +256,19 @@ const CartDetailsPage = () => {
               <Button
                 className="w-100 fw-bold py-3 mb-3 border-0"
                 style={{
-                  backgroundColor: "#ffd60a",
+                  backgroundColor: "#66e48c",
                   color: "#000",
                   fontSize: "16px",
                 }}
+                onClick={handleBuyNowClick}
               >
                 Buy now ₹{product.selling_price}
               </Button>
+                 <LoginPopup
+                 className="d-flex justify-content-center align-items-center " style={{ marginLeft: "-20rem !important" }}
+              isOpen={showLoginPopup}
+              onClose={handleCloseLoginPopup}
+            />
               <Row className="mb-2">
                 {[
                   {
@@ -296,7 +311,6 @@ const CartDetailsPage = () => {
           )}
         </div>
       </Row>
-
       <Row className="mt-5">
         <Col xs={12}>
           {loading ? (
@@ -556,6 +570,24 @@ const CartDetailsPage = () => {
             </div>
           ))}
         </Row>
+      )}
+      {showLoginPopup && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-start pt-5"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1050,
+          }}
+          onClick={handleCloseLoginPopup}
+        >
+          <div
+            className="bg-white rounded-4 position-relative overflow-hidden shadow-lg"
+            style={{ maxWidth: "500px", width: "90%", marginTop: "20px" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+         
+          </div>
+        </div>
       )}
     </Container>
   );

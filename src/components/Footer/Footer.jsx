@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/images/flipzy_online_store.png";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchModuleData } from "../../redux/slices/apiSlice";
+
 const Footer = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const module_action = "category";
+  const { data } = useSelector((state) => state.api);
+  const categoryData = data[module_action]?.result || [];
+
+  useEffect(() => {
+    dispatch(fetchModuleData({ module_action: module_action }));
+  }, [dispatch]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCategoryClick = (category) => {
+    navigate(`/seeall/manufacturerProducts`, {
+      state: {
+        selectedCategory: category.cat_name,
+        categoryId: category.cat_id,
+      },
+    });
+    scrollToTop();
+  };
+
   return (
     <footer className="text-light py-5" style={{ backgroundColor: "#212121" }}>
       <div className="container">
@@ -9,10 +37,7 @@ const Footer = () => {
           {/* Logo Column */}
           <div className="col-md-3 mb-4">
             <div className="d-flex align-items-center mb-3">
-              <div
-                className="text-dark fw-bold text-center"
-                style={{ fontSize: "20px" }}
-              >
+              <div className="text-dark fw-bold text-center" style={{ fontSize: "20px" }}>
                 <img src={logo} alt="image" className="img-fluid w-50" />
               </div>
             </div>
@@ -22,56 +47,20 @@ const Footer = () => {
           <div className="col-md-2 mb-4">
             <h6 className="text-warning mb-3 fw-bold">Shop Categories</h6>
             <ul className="list-unstyled">
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Beauty
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Books
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Electronics
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Gadgets
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Health and Wellness
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Home & Living
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Kids
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Men's Fashion
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Sports and Outdoors
-                </a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-light text-decoration-none">
-                  Women's Fashion
-                </a>
-              </li>
+              {categoryData.map((category) => (
+                <li key={category.cat_id} className="mb-2">
+                  <a
+                    href="#"
+                    className="text-light text-decoration-none"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCategoryClick(category);
+                    }}
+                  >
+                    {category.cat_name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -126,8 +115,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-
-        {/* Bottom Section */}
       </div>
     </footer>
   );

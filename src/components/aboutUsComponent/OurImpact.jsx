@@ -57,11 +57,11 @@ const OurImpact = () => {
             <div className="d-flex align-items-center">
               {/* Icon */}
               <div 
-                className="flex-shrink-0 me-3 d-flex align-items-center justify-content-center"
+                className="flex-shrink-0 mx-3 d-flex align-items-center justify-content-center "
                 style={{
                   width: '80px',
                   height: '80px',
-                  backgroundColor: '#F4E17B',
+                  backgroundColor: '#d6ffe7',
                   borderRadius: '12px',
                   fontSize: '2.5rem'
                 }}
