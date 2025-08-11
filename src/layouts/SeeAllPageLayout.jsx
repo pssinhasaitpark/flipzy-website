@@ -10,7 +10,8 @@ import { SeeAllPages } from "./../views/pages/index";
 const SeeAllPageLayout = () => {
   return (
     <div>
-      {/* <HeaderSeeAll /> */}
+      {/* <HeaderSeeAll />
+       */}
       <SeeAllPages />
       <DownloadQR />
       <Footer />
