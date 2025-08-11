@@ -44,6 +44,7 @@ const LandingPage = () => {
     );
   }, [dispatch]);
 
+  console.log("deals are here", freshDealsData);
   return (
     <div>
       <Header />
