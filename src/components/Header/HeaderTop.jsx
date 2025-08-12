@@ -140,15 +140,17 @@ const HeaderTop = () => {
   };
 
   const handleCategoryClick = (category) => {
-    // Navigate to see all page with products module_action and pass category info
-    navigate(`/seeall/manufacturerProducts`, {
-      state: {
-        selectedCategory: category.cat_name,
-        categoryId: category.cat_id,
-      },
-    });
-    scrollToTop();
-  };
+  // Navigate to see all page with products module_action and pass category info along with page_no
+  navigate(`/seeall/products`, {
+    state: {
+      selectedCategory: category.cat_name,
+      categoryId: category.cat_id,
+      page_no: 1, // Include the page_no in the state
+    },
+  });
+  scrollToTop();
+};
+
 
   const sliderSettings = {
     dots: false,
