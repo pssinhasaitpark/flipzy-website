@@ -14,16 +14,16 @@ import {
 } from "lucide-react";
 import card2 from "../../../assets/images/card2.png";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { fetchModuleData } from "../../../redux/slices/apiSlice";
 import { useLocation } from "react-router-dom";
 import "./CartDetailsPage.css";
-import LoginPopup from "../../../components/loginPopUp/LoginPopUp";
 
 const CartDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const exclusiveProducts = "exclusiveProducts";
   const products = "products";
   const passedProduct = location.state?.product;
@@ -39,11 +39,6 @@ const CartDetailsPage = () => {
   const product =
     allProducts.find((item) => String(item.id) === String(id)) || passedProduct;
   const [selectedImage, setSelectedImage] = useState(0);
-  const [showLoginPopup, setShowLoginPopup] = useState(false);
-
-  useEffect(() => {
-    console.log("showLoginPopup state updated:", showLoginPopup);
-  }, [showLoginPopup]);
 
   useEffect(() => {
     dispatch(
@@ -55,11 +50,9 @@ const CartDetailsPage = () => {
     dispatch(
       fetchModuleData({ module_action: products, params: { limit: 12 } })
     );
-
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, [dispatch, products]);
 
@@ -69,11 +62,8 @@ const CartDetailsPage = () => {
   }, [data]);
 
   const handleBuyNowClick = () => {
-    setShowLoginPopup(true);
-  };
-
-  const handleCloseLoginPopup = () => {
-    setShowLoginPopup(false);
+    // Redirect to checkout route, passing the product as state
+    navigate("/checkout", { state: { product } });
   };
 
   if (!product) {
@@ -264,11 +254,6 @@ const CartDetailsPage = () => {
               >
                 Buy now ₹{product.selling_price}
               </Button>
-                 <LoginPopup
-                 className="d-flex justify-content-center align-items-center " style={{ marginLeft: "-20rem !important" }}
-              isOpen={showLoginPopup}
-              onClose={handleCloseLoginPopup}
-            />
               <Row className="mb-2">
                 {[
                   {
@@ -570,24 +555,6 @@ const CartDetailsPage = () => {
             </div>
           ))}
         </Row>
-      )}
-      {showLoginPopup && (
-        <div
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-start pt-5"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1050,
-          }}
-          onClick={handleCloseLoginPopup}
-        >
-          <div
-            className="bg-white rounded-4 position-relative overflow-hidden shadow-lg"
-            style={{ maxWidth: "500px", width: "90%", marginTop: "20px" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-         
-          </div>
-        </div>
       )}
     </Container>
   );
