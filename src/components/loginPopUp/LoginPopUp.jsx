@@ -123,8 +123,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={handleLogin}
-                className="btn w-100 fw-semibold py-3 pt-2 border-0 shadow-sm"
-                style={{ backgroundColor: "#fbbf24", color: "#000" }}
+                className="btn btn-success w-100 fw-semibold py-3 pt-2 border-0 shadow-sm"
               >
                 Login
               </button>
