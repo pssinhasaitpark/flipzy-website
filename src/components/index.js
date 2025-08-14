@@ -18,4 +18,5 @@ import OurImpact from "./aboutUsComponent/OurImpact.jsx"
 import LoginPopUp from "./loginPopUp/LoginPopUp.jsx"; // Importing the LoginPopUp component
 import OtpComponent from "./otpComponent/OtpComponent.jsx";
 import AddressForm from "./forms/AddressForm.jsx";
-export {AddressForm,Header,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact}
+import OrderHistory from "./orderHistory/OrderHistory.jsx";
+export {AddressForm,Header,OrderHistory,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact}

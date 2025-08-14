@@ -6,12 +6,14 @@ import { PrivacyPolicy, TermsNCondition } from "./views/pages";
 import { AddressForm } from "./components";
 // import SeeAllPage from "./views/pages/SeeAllPage";
 // import { CartDetails } from "./views/pages";
+import { OrderHistory } from "./components";
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/aboutus" element={<AboutUsLayout />} />
+            <Route path="/order-history" element={<OrderHistory />} />
         <Route path="/checkout" element={<AddressForm />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-condition" element={<TermsNCondition />} />
