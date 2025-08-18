@@ -82,6 +82,7 @@ const HeaderSeeAll = ({ onShowFilter }) => {
 
             {/* "Get the app" button shown only on large screens */}
             <button
+             onClick={() => window.open("https://play.google.com/store/apps/details?id=com.freeupapp.freeup&pli=1")}
               className="btn d-none d-lg-block px-3"
               style={{
                 fontWeight: "800",
