@@ -132,7 +132,14 @@ const MobileAppPromo = () => {
               India's #1 Online Resale Platform
             </p>
             <div className="d-grid gap-3 d-sm-flex d-md-grid justify-content-sm-center justify-content-md-start">
-              <a href="#" className="text-decoration-none">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.freeupapp.freeup&pli=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                {" "}
+                {/* onClick={() => window.open("https://play.google.com/store/apps/details?id=com.freeupapp.freeup&pli=1")} */}
                 <img
                   src="https://www.freeup.app/img/googleplay.png"
                   alt="Get it on Google Play"
@@ -145,7 +152,12 @@ const MobileAppPromo = () => {
                   }}
                 />
               </a>
-              <a href="#" className="text-decoration-none">
+              <a
+                href="https://apps.apple.com/in/app/freeup-sell-buy-clothes/id1478109834"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
                 <img
                   src="https://www.freeup.app/img/appstore.png"
                   alt="Download on the App Store"

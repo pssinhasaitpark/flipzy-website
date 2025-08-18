@@ -19,4 +19,7 @@ import LoginPopUp from "./loginPopUp/LoginPopUp.jsx"; // Importing the LoginPopU
 import OtpComponent from "./otpComponent/OtpComponent.jsx";
 import AddressForm from "./forms/AddressForm.jsx";
 import OrderHistory from "./orderHistory/OrderHistory.jsx";
-export {AddressForm,Header,OrderHistory,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact}
+import Profile from "./Profile/Profile.jsx"; // Importing the Profile component
+import ShippingAddress from "./Profile/ShippingAddress.jsx"; // Importing the ShippingAddress component
+import PaymentMethod from "./Profile/PaymentMethod.jsx";
+export {AddressForm,Header,OrderHistory,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact,Profile,ShippingAddress,PaymentMethod};
