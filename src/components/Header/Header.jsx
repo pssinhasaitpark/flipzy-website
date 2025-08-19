@@ -151,7 +151,7 @@ const CustomNavbar = () => {
 
   return (
     <>
-      <div className="border border-bottom mb-4">
+      <div className="border border-bottom ">
         <div className="container mt-2 mb-3">
           <Navbar
             expand="lg"

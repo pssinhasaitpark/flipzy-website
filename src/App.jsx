@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage,CartDetailsLayout,SeeAllPageLayout,AboutUsLayout,ProfileLayout,ShippingAddressLayout } from "./layouts/index";
 import "./App.css";
 import { PrivacyPolicy, TermsNCondition } from "./views/pages";
-import { AddressForm } from "./components";
-import {PaymentMethod} from "./components/index";
+import { AddressForm, UpdateWarehouse } from "./components";
+import {PaymentMethod,ViewInfo} from "./components/index";
 // import SeeAllPage from "./views/pages/SeeAllPage";
 // import { CartDetails } from "./views/pages";
 import { OrderHistory } from "./components";
@@ -23,6 +23,8 @@ const App = () => {
 <Route path="/profile" element={<ProfileLayout />} />
 <Route path="/shipping" element={<ShippingAddressLayout />} />
 <Route path="/payment-method" element={<PaymentMethod />} />
+<Route path="/update-warehouse" element={<UpdateWarehouse />} />
+<Route path="/view-info" element={<ViewInfo />} />
       </Routes>
     </BrowserRouter>
   );
