@@ -16,7 +16,7 @@
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background: #a1e6b8;
+  background: #47504a;
   border-radius: 50px;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
 }

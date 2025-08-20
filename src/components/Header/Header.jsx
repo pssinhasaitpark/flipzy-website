@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
-import { logo } from "../../assets/index";
+import { Navbar, Nav, Form, FormControl, Button, Modal } from "react-bootstrap";
+import { logo, logo2, onlyLogo } from "../../assets/index";
 import "./Header.css";
 import { FaSearch } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import LoginPopup from "../loginPopUp/LoginPopUp";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -11,14 +12,13 @@ const CustomNavbar = () => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
   const loginRef = useRef(null);
   const orderHistoryRef = useRef(null);
   const userRef = useRef(null);
   const logoutRef = useRef(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   const [underlineStyle, setUnderlineStyle] = useState({
@@ -31,11 +31,9 @@ const CustomNavbar = () => {
       const token = localStorage.getItem("device_token");
       setIsLoggedIn(!!token);
     };
-
     checkAuthStatus();
     window.addEventListener("storage", checkAuthStatus);
     window.addEventListener("authChange", checkAuthStatus);
-
     return () => {
       window.removeEventListener("storage", checkAuthStatus);
       window.removeEventListener("authChange", checkAuthStatus);
@@ -43,16 +41,23 @@ const CustomNavbar = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === "/aboutus") {
+    // Check if the current route is a profile-related route
+    const profileRoutes = [
+      "/profile",
+      "/payment-method",
+      "/update-warehouse",
+      "/view-info",
+      "/shipping",
+    ];
+    if (profileRoutes.some((route) => location.pathname.startsWith(route))) {
+      setActiveTab("userProfile");
+    } else if (location.pathname === "/aboutus") {
       setActiveTab("about");
     } else if (location.pathname === "/order-history") {
       setActiveTab("orderHistory");
-    } else if (location.pathname === "/profile") {
-      setActiveTab("userProfile");
     } else {
       setActiveTab("home");
     }
-
     setIsLoginPopupOpen(false);
   }, [location.pathname]);
 
@@ -60,7 +65,6 @@ const CustomNavbar = () => {
     const updateUnderline = () => {
       let width = "0px";
       let left = "0px";
-
       const refMap = {
         home: homeRef,
         about: aboutRef,
@@ -69,19 +73,15 @@ const CustomNavbar = () => {
         userProfile: userRef,
         logout: logoutRef,
       };
-
       const currentRef = refMap[activeTab];
       if (currentRef && currentRef.current) {
         width = `${currentRef.current.offsetWidth}px`;
         left = `${currentRef.current.offsetLeft}px`;
       }
-
       setUnderlineStyle({ width, left });
     };
-
     const timeoutId = setTimeout(updateUnderline, 10);
     window.addEventListener("resize", updateUnderline);
-
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", updateUnderline);
@@ -94,13 +94,40 @@ const CustomNavbar = () => {
     setIsLoginPopupOpen(true);
   };
 
-  const handleLogout = (e) => {
+  const handleLogoutClick = (e) => {
     e.preventDefault();
     setActiveTab("logout");
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
     localStorage.removeItem("device_token");
     setIsLoggedIn(false);
+    setShowLogoutConfirm(false);
     navigate("/");
     setActiveTab("home");
+    window.dispatchEvent(new Event("authChange"));
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirm(false);
+    // Reset the active tab to the current page
+    const profileRoutes = [
+      "/profile",
+      "/payment-method",
+      "/update-warehouse",
+      "/view-info",
+      "/shipping",
+    ];
+    if (profileRoutes.some((route) => location.pathname.startsWith(route))) {
+      setActiveTab("userProfile");
+    } else if (location.pathname === "/aboutus") {
+      setActiveTab("about");
+    } else if (location.pathname === "/order-history") {
+      setActiveTab("orderHistory");
+    } else {
+      setActiveTab("home");
+    }
   };
 
   const handleTabClick = (tab) => {
@@ -112,12 +139,19 @@ const CustomNavbar = () => {
 
   const handleCloseLoginPopup = () => {
     setIsLoginPopupOpen(false);
-    if (location.pathname === "/aboutus") {
+    const profileRoutes = [
+      "/profile",
+      "/payment-method",
+      "/update-warehouse",
+      "/view-info",
+      "/shipping",
+    ];
+    if (profileRoutes.some((route) => location.pathname.startsWith(route))) {
+      setActiveTab("userProfile");
+    } else if (location.pathname === "/aboutus") {
       setActiveTab("about");
     } else if (location.pathname === "/order-history") {
       setActiveTab("orderHistory");
-    } else if (location.pathname === "/profile") {
-      setActiveTab("userProfile");
     } else {
       setActiveTab("home");
     }
@@ -151,13 +185,17 @@ const CustomNavbar = () => {
 
   return (
     <>
-      <div className="border border-bottom ">
+      <div className="border border-bottom">
         <div className="container mt-2 mb-3">
           <Navbar
             expand="lg"
             className="justify-content-between align-items-center"
           >
-            <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
+            <Navbar.Brand
+              as={Link}
+              to="/"
+              className="d-flex align-items-center"
+            >
               <img
                 src={logo}
                 height="45"
@@ -174,7 +212,7 @@ const CustomNavbar = () => {
                 <FormControl
                   type="text"
                   placeholder="Search for anything"
-                  className="w-100 rounded border-warning"
+                  className="w-100 rounded border-success"
                   value={searchQuery}
                   onChange={handleSearchInputChange}
                   onKeyPress={handleSearchKeyPress}
@@ -212,7 +250,6 @@ const CustomNavbar = () => {
                 >
                   About Us
                 </Nav.Link>
-
                 {!isLoggedIn ? (
                   <Nav.Link
                     ref={loginRef}
@@ -259,16 +296,15 @@ const CustomNavbar = () => {
                       className={`me-3 mx-3 ${
                         activeTab === "logout" ? "active fw-bold" : ""
                       }`}
-                      onClick={handleLogout}
+                      onClick={handleLogoutClick}
                       style={{ fontWeight: "600" }}
                     >
                       Logout
                     </Nav.Link>
                   </>
                 )}
-
                 <Button
-                  className="primary-color-bg rounded-pill text-light border-0 px-4 fw-bolder"
+                  className="bg-success rounded-pill text-light border-0 px-4 fw-bolder"
                   style={{ fontWeight: "600" }}
                 >
                   Sell
@@ -287,6 +323,55 @@ const CustomNavbar = () => {
           </Navbar>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <Modal show={showLogoutConfirm} onHide={handleCancelLogout} centered>
+        <Modal.Header>
+          <div className="d-flex align-items-center">
+            <img
+              className="img-fluid"
+              src={onlyLogo}
+              alt=""
+              style={{ width: "40px" }}
+            />
+            <Modal.Title className="pt-2 pl-2">Confirm Logout</Modal.Title>
+          </div>
+          <button
+            type="button"
+            className="btn-close border-0  mt-1 bg-transparent "
+            onClick={handleCancelLogout}
+            style={{
+              fontSize: "1.5rem",
+              outline: "none",
+              boxShadow: "none",
+            }}
+          >
+            <IoClose />
+          </button>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Are you sure you want to logout? You will need to login again to
+            access your account.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={handleCancelLogout}
+            className="px-4"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleConfirmLogout}
+            className="px-4"
+          >
+            Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <LoginPopup
         isOpen={isLoginPopupOpen}

@@ -3,10 +3,6 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import {
   BadgeAboutUs,
   CardsDetailComponent,
-  DownloadQR,
-  Footer,
-  FooterBottom,
-  Header,
   OurImpact,
   OurMission,
   SliderAboutUs,
@@ -15,7 +11,6 @@ import {
 const AboutUsLayout = () => {
   return (
     <div>
-      <Header />
       <Container className="px-4">
         <img
           className="img-fluid mx-auto my-4 d-block"
@@ -26,12 +21,9 @@ const AboutUsLayout = () => {
         <OurMission />
         <CardsDetailComponent />
         <BadgeAboutUs />
-     <OurImpact/>
+        <OurImpact />
       </Container>
-         <SliderAboutUs />
-      <DownloadQR />
-      <Footer />
-      <FooterBottom />
+      <SliderAboutUs />
     </div>
   );
 };

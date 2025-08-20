@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown, Eye, EyeOff } from "lucide-react";
 import {
-  DownloadQR,
-  Footer,
-  FooterBottom,
-  Header,
+  DownloadQR
 } from "../../components/index";
 const PaymentMethod = () => {
   const [formData, setFormData] = useState({
@@ -63,10 +60,6 @@ const PaymentMethod = () => {
 
   return (
     <>
-      {" "}
-      <div className="head mb-4">
-        <Header />
-      </div>
       <div className="container border p-5">
         {/* Bank Selection Dropdown */}
         <div style={{ marginBottom: "20px" }}>
@@ -292,11 +285,7 @@ const PaymentMethod = () => {
           Add Payment Method
         </button>
       </div>
-      <div className="mt-5">
-        <DownloadQR />
-        <Footer />
-        <FooterBottom />
-      </div>
+
     </>
   );
 };

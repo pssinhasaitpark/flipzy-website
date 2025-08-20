@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { DownloadQR, Footer, FooterBottom, Header } from "..";
 
 const WarehouseForm = () => {
   const [formData, setFormData] = useState({
@@ -31,9 +30,7 @@ const WarehouseForm = () => {
 
   return (
     <>
-      <div className="head mb-0">
-        <Header />
-      </div>
+    
       <div
         className="container-fluid p-3"
         style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
@@ -258,12 +255,7 @@ const WarehouseForm = () => {
           </div>
         </div>
       </div>
-      <div className="">
-        {" "}
-        <DownloadQR />
-        <Footer />
-        <FooterBottom />
-      </div>
+
     </>
   );
 };
