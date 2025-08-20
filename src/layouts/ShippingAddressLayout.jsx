@@ -1,13 +1,15 @@
-import React from 'react'
-import { Header, Footer, FooterBottom } from '../components/index.js'
-import { ShippingAddress } from '../components/index.js'
+import React from "react";
+import { Header, Footer, FooterBottom } from "../components/index.js";
+import { ShippingAddress } from "../components/index.js";
 const ShippingAddressLayout = () => {
   return (
-    <div><Header />
+    <div>
+      <Header />
       <ShippingAddress />
       <Footer />
-      <FooterBottom /></div>
-  )
-}
+      <FooterBottom />
+    </div>
+  );
+};
 
-export default ShippingAddressLayout
+export default ShippingAddressLayout;

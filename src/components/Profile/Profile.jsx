@@ -14,8 +14,9 @@ import {
 import "./Profile.css";
 import { Link } from "react-router-dom";
 import { fetchModuleData } from "../../redux/slices/apiSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProfileMenu from "./ProfileMenu";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -64,10 +65,10 @@ const Profile = () => {
   }, [dispatch]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -77,20 +78,28 @@ const Profile = () => {
         module_action: "update_user_profile",
         params: {
           user_id: "22",
-          gst_number: formData.gst, // Only GST is editable
+          gst_number: formData.gst,
+          is_manufacturer: formData.isManufacturer ? "1" : "0",
+          shop_name: formData.shop,
         },
       };
       await dispatch(fetchModuleData(payload)).unwrap();
-      toast.success("GST updated successfully!");
+      toast.success("Profile updated successfully!");
       localStorage.setItem("user_profile", JSON.stringify(formData));
     } catch (err) {
-      toast.error("Failed to update GST!");
-      console.error("Error updating GST:", err);
+      toast.error("Failed to update profile!");
+      console.error("Error updating profile:", err);
     }
   };
 
-  if (loading.user_profile) return <div className="text-center py-5">Loading...</div>;
-  if (error.user_profile) return <div className="text-center py-5 text-danger">Error: {error.user_profile}</div>;
+  if (loading.user_profile)
+    return <div className="text-center py-5">Loading...</div>;
+  if (error.user_profile)
+    return (
+      <div className="text-center py-5 text-danger">
+        Error: {error.user_profile}
+      </div>
+    );
 
   return (
     <>
@@ -108,21 +117,31 @@ const Profile = () => {
                         src={data.user_profile?.result?.profile_pic}
                         alt="Profile"
                         className="rounded-circle"
-                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                        }}
                       />
                     </div>
                     <div className="row text-center">
                       <div className="col-4">
                         <div className="fw-bold text-muted small">Post</div>
-                        <div className="fs-5 fw-bold">{data.user_profile?.result?.total_items || 0}</div>
+                        <div className="fs-5 fw-bold">
+                          {data.user_profile?.result?.total_items || 0}
+                        </div>
                       </div>
                       <div className="col-4">
                         <div className="fw-bold text-muted small">Rating</div>
-                        <div className="fs-5 fw-bold">{data.user_profile?.result?.rating || 0}</div>
+                        <div className="fs-5 fw-bold">
+                          {data.user_profile?.result?.rating || 0}
+                        </div>
                       </div>
                       <div className="col-4">
                         <div className="fw-bold text-muted small">Viewed</div>
-                        <div className="fs-5 fw-bold">{data.user_profile?.result?.seen_count || 0}</div>
+                        <div className="fs-5 fw-bold">
+                          {data.user_profile?.result?.seen_count || 0}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -131,7 +150,9 @@ const Profile = () => {
                 <div className="card shadow-sm mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <h6 className="card-title mb-0 fw-bold">Profile Details:</h6>
+                      <h6 className="card-title mb-0 fw-bold">
+                        Profile Details:
+                      </h6>
                     </div>
                     <div className="mb-3 d-flex">
                       <label className="form-label text-muted">
@@ -143,7 +164,9 @@ const Profile = () => {
                       <label className="form-label text-muted">
                         <span className="text-dark">Username: </span>
                       </label>
-                      <div className="fs-6 fw-bold ms-2">{formData.username}</div>
+                      <div className="fs-6 fw-bold ms-2">
+                        {formData.username}
+                      </div>
                     </div>
                     <div className="mb-3 d-flex">
                       <label className="form-label text-muted">
@@ -151,25 +174,52 @@ const Profile = () => {
                       </label>
                       <div className="fs-6 fw-bold ms-2">{formData.mobile}</div>
                     </div>
-                    <div className="mb-3 d-flex">
-                      <label className="form-label text-muted">
-                        <span className="text-dark">Shop: </span>
+                    {/* Manufacturer Toggle */}
+                    <div className="mb-3 d-flex justify-content-between align-items-center">
+                      <span className="small text-muted">
+                        Register as a manufacturer?
+                      </span>
+                      <label className="switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="isManufacturer"
+                          checked={formData.isManufacturer}
+                          onChange={handleInputChange}
+                        />
+                        <span className="slider"></span>
                       </label>
-                      <div className="fs-6 fw-bold ms-2">{formData.shop}</div>
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label text-muted">
-                        <span className="text-dark">GST:</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="gst"
-                        value={formData.gst}
-                        onChange={handleInputChange}
-                        placeholder="Enter GST Number"
-                      />
-                    </div>
+                    {/* Conditional Shop Field */}
+                    {formData.isManufacturer && (
+                      <div className="mb-3">
+                        <label className="form-label text-muted">
+                          <span className="text-dark">Shop*: </span>
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="shop"
+                          value={formData.shop}
+                          onChange={handleInputChange}
+                          placeholder="Enter Shop Name"
+                        />
+                      </div>
+                    )}
+                    {/* Conditional GST Field */}
+                    {formData.isManufacturer && (
+                      <div className="mb-3">
+                        <label className="form-label text-muted">GST:</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="gst"
+                          value={formData.gst}
+                          onChange={handleInputChange}
+                          placeholder="Enter GST Number"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -181,7 +231,9 @@ const Profile = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <div className="d-flex align-items-center">
                         <FaBell className="text-warning me-2" />
-                        <span className="mx-2">Enable/Disable Notification</span>
+                        <span className="mx-2">
+                          Enable/Disable Notification
+                        </span>
                       </div>
                       <div className="form-check form-switch">
                         <label className="switch">
@@ -207,56 +259,69 @@ const Profile = () => {
                     </div>
                     {/* Menu Items */}
                     <div className="list-group list-group-flush">
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <div className="d-flex align-items-center">
-                          <Link to="/payment-method">
+                      {/* <Link to="/payment-method">
+                        <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
+                          <div className="d-flex align-items-center">
                             <FaCreditCard className="text-muted me-3" />
-                            <span className="mx-2 text-dark">Payment Method</span>
-                          </Link>
+                            <span className="mx-2 text-dark">
+                              Payment Method
+                            </span>
+                          </div>
+                          <FaChevronRight className="text-muted" />
                         </div>
-                        <FaChevronRight className="text-muted" />
-                      </div>
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <div className="d-flex align-items-center">
+                      </Link>
                           <Link to="/update-warehouse">
-                            <FaWarehouse className="text-muted me-3" />
-                            <span className="mx-2 text-dark">Create/Update Warehouse</span>
-                          </Link>
-                        </div>
-                        <FaChevronRight className="text-muted" />
-                      </div>
                       <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
                         <div className="d-flex align-items-center">
-                          <Link to="/view-info">
-                            <FaInfoCircle className="text-muted me-3" />
-                            <span className="mx-2 text-dark">View More Info</span>
-                          </Link>
+                            <FaWarehouse className="text-muted me-3" />
+                            <span className="mx-2 text-dark">
+                              Create/Update Warehouse
+                            </span>
                         </div>
                         <FaChevronRight className="text-muted" />
                       </div>
+                          </Link>
+                          <Link to="/view-info">
+                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
+                        <div className="d-flex align-items-center">
+                            <FaInfoCircle className="text-muted me-3" />
+                            <span className="mx-2 text-dark">
+                              View More Info
+                            </span>
+                        </div>
+                        <FaChevronRight className="text-muted" />
+                      </div>
+                          </Link>
                       <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
                         <div className="d-flex align-items-center">
                           <FaGift className="text-success me-3" />
-                          <div className="mx-2 text-success">Refer & Earn ₹50! Refer & Invite your friend</div>
+                          <div className="mx-2 text-success">
+                            Refer & Earn ₹50! Refer & Invite your friend
+                          </div>
                         </div>
                         <FaChevronRight className="text-muted" />
                       </div>
                       <div className="text-center mt-2">
-                        <a href="#" className="text-success text-decoration-none small">
+                        <a
+                          href="#"
+                          className="text-success text-decoration-none small"
+                        >
                           View my referrals
                         </a>
-                      </div>
-                      <Link to="/shipping">
+                      </div> */}
+                                <ProfileMenu/>
+                      {/* <Link to="/shipping">
                         <div className="d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
                           <span className="mx-1 text-dark">Address</span>
                           <FaUsers className="text-muted" />
                         </div>
-                      </Link>
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
+                      </Link> */}
+                      {/* <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
                         <span>Logout</span>
                         <FaSignOutAlt className="text-muted" />
-                      </div>
+                      </div> */}
                     </div>
+          
                   </div>
                 </div>
                 {/* Save Button */}
@@ -268,11 +333,15 @@ const Profile = () => {
                   >
                     {loading.update_user_profile ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
                         Saving...
                       </>
                     ) : (
-                      "Save GST"
+                      "Save Profile"
                     )}
                   </button>
                 </div>
