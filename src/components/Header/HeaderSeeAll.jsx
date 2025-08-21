@@ -33,13 +33,14 @@ const HeaderSeeAll = ({ onShowFilter }) => {
             style={{ minWidth: "150px", maxWidth: "calc(100% - 120px)" }}
           >
             <input
-              className="form-control rounded-pill bg-light search-all w-100"
+              className="form-control bg-light search-all w-100"
               type="search"
               placeholder="Search for anything"
               aria-label="Search"
               style={{
                 paddingRight: "45px",
                 fontSize: "14px",
+                borderRadius: "100px",
                 height: "40px",
               }}
             />
@@ -82,7 +83,11 @@ const HeaderSeeAll = ({ onShowFilter }) => {
 
             {/* "Get the app" button shown only on large screens */}
             <button
-             onClick={() => window.open("https://play.google.com/store/apps/details?id=com.freeupapp.freeup&pli=1")}
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.freeupapp.freeup&pli=1"
+                )
+              }
               className="btn d-none d-lg-block px-3"
               style={{
                 fontWeight: "800",
