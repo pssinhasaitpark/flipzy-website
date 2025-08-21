@@ -16,9 +16,10 @@
   top: 7px;
   right: 13px;
 }
-.search-all {
+/* .search-all {
   width: 1500px;
-}
+  border-radius: "100px";
+} */
 @media screen and (min-width: 300px) and (max-width: 680px) {
   .search-all {
     width: 350px;
@@ -47,9 +48,10 @@
   right: 13px;
 } */
 
-.search-all {
+/* .search-all {
   width: 1500px;
-}
+  border-radius: "100px";
+} */
 
 @media screen and (min-width: 300px) and (max-width: 680px) {
   .search-all {
@@ -384,6 +386,3 @@
     right: 0px !important;
   }
 }
-
-
-
