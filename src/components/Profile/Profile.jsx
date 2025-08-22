@@ -29,6 +29,16 @@ const Profile = () => {
     mobile: "",
     isManufacturer: false,
     notificationsEnabled: true,
+    // Additional fields needed for the API
+    address: "",
+    landmark: "",
+    pinCode: "",
+    profilePic: "",
+    gender: "0",
+    walletAmount: "0",
+    appVersion: "1.38",
+    deviceType: "0",
+    deviceToken: "",
   });
 
   // Fetch user profile on component mount
@@ -51,7 +61,19 @@ const Profile = () => {
             mobile: userData.mobile || "",
             isManufacturer: userData.is_manufacturer === "1",
             notificationsEnabled: true,
+            // Set additional fields from API response
+            address: userData.address || "",
+            landmark: userData.landmark || "",
+            pinCode: userData.pin_code || "",
+            profilePic: userData.profile_pic || "",
+            gender: userData.gender || "0",
+            walletAmount: userData.wallet_amount || "0",
+            appVersion: "1.38", // Static value as per your example
+            deviceType: "0", // Static value as per your example
+            deviceToken: userData.device_token || "",
           });
+
+          // Store device token in localStorage if available
           if (userData.device_token) {
             localStorage.setItem("device_token", userData.device_token);
           }
@@ -74,18 +96,42 @@ const Profile = () => {
 
   const handleSaveProfile = async () => {
     try {
+      // Get device token from localStorage if not already in formData
+      const storedDeviceToken =
+        localStorage.getItem("device_token") || formData.deviceToken;
+
       const payload = {
-        module_action: "update_user_profile",
+        module_action: "update_profile",
         params: {
           user_id: "22",
+          name: formData.name,
+          user_name: formData.username,
+          mobile: formData.mobile,
+          address: formData.address,
+          landmark: formData.landmark,
+          pin_code: formData.pinCode,
+          profile_pic: formData.profilePic,
+          shop_name: formData.shop,
           gst_number: formData.gst,
           is_manufacturer: formData.isManufacturer ? "1" : "0",
-          shop_name: formData.shop,
+          gender: formData.gender,
+          wallet_amount: formData.walletAmount,
+          app_version: formData.appVersion,
+          device_type: formData.deviceType,
+          device_token: storedDeviceToken,
         },
       };
-      await dispatch(fetchModuleData(payload)).unwrap();
+
+      console.log("Saving profile with payload:", payload);
+
+      const response = await dispatch(fetchModuleData(payload)).unwrap();
+
       toast.success("Profile updated successfully!");
+
+      // Update localStorage with the updated profile data
       localStorage.setItem("user_profile", JSON.stringify(formData));
+
+      console.log("Profile update response:", response);
     } catch (err) {
       toast.error("Failed to update profile!");
       console.error("Error updating profile:", err);
@@ -114,7 +160,10 @@ const Profile = () => {
                   <div className="card-body text-center">
                     <div className="position-relative d-inline-block mb-3">
                       <img
-                        src={data.user_profile?.result?.profile_pic}
+                        src={
+                          formData.profilePic ||
+                          data.user_profile?.result?.profile_pic
+                        }
                         alt="Profile"
                         className="rounded-circle"
                         style={{
@@ -174,6 +223,35 @@ const Profile = () => {
                       </label>
                       <div className="fs-6 fw-bold ms-2">{formData.mobile}</div>
                     </div>
+
+                    {/* Additional fields for address information */}
+                    <div className="mb-3 d-flex">
+                      <label className="form-label text-muted">
+                        <span className="text-dark">Address: </span>
+                      </label>
+                      <div className="fs-6 fw-bold ms-2">
+                        {formData.address}
+                      </div>
+                    </div>
+
+                    <div className="mb-3 d-flex">
+                      <label className="form-label text-muted">
+                        <span className="text-dark">Landmark: </span>
+                      </label>
+                      <div className="fs-6 fw-bold ms-2">
+                        {formData.landmark}
+                      </div>
+                    </div>
+
+                    <div className="mb-3 d-flex">
+                      <label className="form-label text-muted">
+                        <span className="text-dark">Pin Code: </span>
+                      </label>
+                      <div className="fs-6 fw-bold ms-2">
+                        {formData.pinCode}
+                      </div>
+                    </div>
+
                     {/* Manufacturer Toggle */}
                     <div className="mb-3 d-flex justify-content-between align-items-center">
                       <span className="small text-muted">
@@ -259,69 +337,8 @@ const Profile = () => {
                     </div>
                     {/* Menu Items */}
                     <div className="list-group list-group-flush">
-                      {/* <Link to="/payment-method">
-                        <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                          <div className="d-flex align-items-center">
-                            <FaCreditCard className="text-muted me-3" />
-                            <span className="mx-2 text-dark">
-                              Payment Method
-                            </span>
-                          </div>
-                          <FaChevronRight className="text-muted" />
-                        </div>
-                      </Link>
-                          <Link to="/update-warehouse">
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <div className="d-flex align-items-center">
-                            <FaWarehouse className="text-muted me-3" />
-                            <span className="mx-2 text-dark">
-                              Create/Update Warehouse
-                            </span>
-                        </div>
-                        <FaChevronRight className="text-muted" />
-                      </div>
-                          </Link>
-                          <Link to="/view-info">
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <div className="d-flex align-items-center">
-                            <FaInfoCircle className="text-muted me-3" />
-                            <span className="mx-2 text-dark">
-                              View More Info
-                            </span>
-                        </div>
-                        <FaChevronRight className="text-muted" />
-                      </div>
-                          </Link>
-                      <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <div className="d-flex align-items-center">
-                          <FaGift className="text-success me-3" />
-                          <div className="mx-2 text-success">
-                            Refer & Earn ₹50! Refer & Invite your friend
-                          </div>
-                        </div>
-                        <FaChevronRight className="text-muted" />
-                      </div>
-                      <div className="text-center mt-2">
-                        <a
-                          href="#"
-                          className="text-success text-decoration-none small"
-                        >
-                          View my referrals
-                        </a>
-                      </div> */}
-                                <ProfileMenu/>
-                      {/* <Link to="/shipping">
-                        <div className="d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                          <span className="mx-1 text-dark">Address</span>
-                          <FaUsers className="text-muted" />
-                        </div>
-                      </Link> */}
-                      {/* <div className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
-                        <span>Logout</span>
-                        <FaSignOutAlt className="text-muted" />
-                      </div> */}
+                      <ProfileMenu />
                     </div>
-          
                   </div>
                 </div>
                 {/* Save Button */}
@@ -329,9 +346,9 @@ const Profile = () => {
                   <button
                     className="btn btn-success btn-lg btn-block"
                     onClick={handleSaveProfile}
-                    disabled={loading.update_user_profile}
+                    disabled={loading.update_profile}
                   >
-                    {loading.update_user_profile ? (
+                    {loading.update_profile ? (
                       <>
                         <span
                           className="spinner-border spinner-border-sm me-2"
