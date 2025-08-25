@@ -1,0 +1,17 @@
+/* Custom styles for the unique UI */
+.shadow-sm {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+.rounded-3 {
+  border-radius: 0.75rem !important;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 20px;
+}

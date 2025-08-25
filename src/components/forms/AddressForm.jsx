@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { logo } from "../../assets/index";
+import { DownloadQR, Footer, FooterBottom } from "..";
 
 const CustomNavbar = () => {
   return (
@@ -217,6 +218,9 @@ const AddressForm = () => {
           </div>
         </Form>
       </Container>
+      <DownloadQR />
+            <Footer />
+            <FooterBottom />
     </>
   );
 };
