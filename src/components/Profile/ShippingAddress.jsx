@@ -15,14 +15,17 @@ import {
 } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 const ShippingAddress = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.api);
   const [showModal, setShowModal] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [currentAddress, setCurrentAddress] = useState(null);
-
+  // Inside the component
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { fromCheckout } = location.state || {};
   // Initial form values
   const initialValues = {
     zipcode: "",
@@ -149,6 +152,15 @@ const ShippingAddress = () => {
         position: "top-right",
         autoClose: 3000,
       });
+      // Navigate back to checkout only if fromCheckout is true
+      if (fromCheckout) {
+        navigate("/checkout", {
+          state: {
+            product: location.state?.product,
+            updatedAddress: addresses.find((addr) => addr.address_id === id),
+          },
+        });
+      }
     } catch (error) {
       toast.error("Failed to set default address. Please try again.", {
         position: "top-right",

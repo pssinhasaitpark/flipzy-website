@@ -25,5 +25,5 @@ import PaymentMethod from "./Profile/PaymentMethod.jsx";
 import ViewInfo from "./Profile/ViewInfo.jsx";
 import UpdateWarehouse from "./Profile/UpdateWarehouse.jsx";
 
-
-export {AddressForm,ViewInfo,Header,UpdateWarehouse,OrderHistory,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact,Profile,ShippingAddress,PaymentMethod,};
+import Checkout from "./checkout/Checkout.jsx"
+export {AddressForm,Checkout,ViewInfo,Header,UpdateWarehouse,OrderHistory,HeaderTop,Footer,FooterBottom,Slider,PopularBrands,LowestPrice,Cards,ReviewSlider,HeroSection,DownloadQR,OtpComponent,HeaderSeeAll,OurMission,LoginPopUp,CardsDetailComponent,SliderAboutUs,BadgeAboutUs,OurImpact,Profile,ShippingAddress,PaymentMethod,};

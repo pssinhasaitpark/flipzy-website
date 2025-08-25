@@ -26,7 +26,8 @@ const LayoutWrapper = () => {
   // Define routes where header should be hidden
   const hideHeaderRoutes = [
     '/seeall',
-    '/cartDetails'
+    '/cartDetails',
+
   ];
   
   // Check if current path starts with any of the hideHeaderRoutes

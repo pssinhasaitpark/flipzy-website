@@ -42,6 +42,8 @@ import {
   ViewInfo,
   UpdateWarehouse,
   ShippingAddress,
+  AddressForm,
+  Checkout,
 } from "./components";
 import { PrivacyPolicy, TermsNCondition } from "./views/pages";
 
@@ -68,12 +70,14 @@ const App = () => {
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-condition" element={<TermsNCondition />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route
             path="/cartDetails/:name/:id"
             element={<CartDetailsLayout />}
           />
           <Route path="/seeall/:module_action" element={<SeeAllPageLayout />} />
         </Route>
+          <Route path="/addressform" element={<AddressForm />} />
       </Routes>
     </BrowserRouter>
   );
