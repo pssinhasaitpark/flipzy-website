@@ -629,11 +629,11 @@ const SeeAllPage = () => {
                             width: "100%",
                             position: "relative",
                             overflow: "hidden",
-                            height: "0",
-                            paddingBottom: "69%",
-                            minHeight: 120,
-                            maxHeight: 220,
+                            height: "240px", // Increased from dynamic padding to fixed height
+                            minHeight: 240, // Increased minimum height
+                            maxHeight: 280, // Increased maximum height
                             background: "#f9f9f9",
+                            borderRadius: "10px 10px 0 0", // Rounded top corners
                           }}
                         >
                           {item.is_sold === "1" && (
@@ -698,49 +698,65 @@ const SeeAllPage = () => {
                                 position: "absolute",
                                 left: 0,
                                 top: 0,
+                                transition: "transform 0.3s ease", // Added hover effect
+                              }}
+                              onMouseOver={(e) => {
+                                if (item.is_sold !== "1") {
+                                  e.target.style.transform = "scale(1.05)";
+                                }
+                              }}
+                              onMouseOut={(e) => {
+                                e.target.style.transform = "scale(1)";
                               }}
                             />
                           </Link>
                         </div>
-                        <Card.Body className="px-3 py-2">
+
+                        <Card.Body
+                          className="px-3 py-2"
+                          style={{ minHeight: "120px" }}
+                        >
+                          {" "}
                           <Card.Title
                             className="mb-1 text-black fw-bold"
                             style={{
-                              fontSize: "0.99rem",
+                              fontSize: "0.95rem",
                               whiteSpace: "nowrap",
                               overflow: "hidden",
                               textOverflow: "ellipsis",
                               color: item.is_sold === "1" ? "#666" : "#000",
+                              lineHeight: "1.2",
                             }}
                           >
                             {item.product_name}
                           </Card.Title>
                           <Card.Text
-                            className="text-muted"
+                            className="text-muted mb-2"
                             style={{
-                              fontSize: "0.85rem",
+                              fontSize: "0.8rem", // Reduced font size
                               color: item.is_sold === "1" ? "#999" : "#6c757d",
+                              lineHeight: "1.1",
                             }}
                           >
                             {item.cat_name}
                           </Card.Text>
-                          <div className="d-flex align-items-center">
+                          <div className="d-flex align-items-center mb-2">
                             <span
-                              className="fw-bolder text-success me-2"
+                              className="fw-bolder text-success mr-2"
                               style={{
                                 color:
                                   item.is_sold === "1" ? "#999" : "#198754",
                                 fontWeight: 700,
-                                fontSize: "1rem",
+                                fontSize: "0.95rem", // Slightly reduced
                               }}
                             >
                               ₹{item.selling_price}
                             </span>
-                            <span className="ml-2">
+                            <span>
                               <strike
                                 className="text-muted"
                                 style={{
-                                  fontSize: "0.85rem",
+                                  fontSize: "0.8rem", // Reduced
                                   color:
                                     item.is_sold === "1" ? "#ccc" : "#6c757d",
                                 }}
@@ -749,32 +765,33 @@ const SeeAllPage = () => {
                               </strike>
                             </span>
                           </div>
-                          <div className="pt-3">
+                          <div className="d-flex align-items-center justify-content-between">
                             <span
-                              className="fw-bolder text-black me-2"
+                              className="fw-bolder text-black"
                               style={{
                                 color: item.is_sold === "1" ? "#999" : "#000",
+                                fontSize: "0.85rem", // Reduced font size
                               }}
                             >
                               {item.username}
                             </span>
-                            <div className="d-flex mt-2">
+                            <div className="d-flex">
                               {[...Array(4)].map((_, i) => (
                                 <FaStar
                                   key={i}
                                   style={{
                                     color:
                                       item.is_sold === "1" ? "#ccc" : "green",
-                                    fontSize: "1rem",
-                                    marginRight: "3px",
+                                    fontSize: "0.85rem", // Reduced star size
+                                    marginRight: "2px",
                                   }}
                                 />
                               ))}
                               <FaRegStar
                                 style={{
                                   color: item.is_sold === "1" ? "#ddd" : "grey",
-                                  fontSize: "1rem",
-                                  marginLeft: "3px",
+                                  fontSize: "0.85rem", // Reduced star size
+                                  marginLeft: "2px",
                                   stroke:
                                     item.is_sold === "1" ? "#ddd" : "grey",
                                   strokeWidth: "10",
@@ -854,8 +871,8 @@ const SeeAllPage = () => {
                         onClick={() => handlePageClick(pageNo + 1)}
                         disabled={pageNo === totalPages}
                       >
-                        Next
-                      sss</button>
+                        Next sss
+                      </button>
                     </li>
                   </ul>
                 </div>

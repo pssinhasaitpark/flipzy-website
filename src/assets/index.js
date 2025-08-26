@@ -4,4 +4,6 @@ import mobile from "./images/mobile.png";
 import qrCode from "./images/qr-code.png";
 import BoxLogo from "./images/flipzy_online_store.png";
 import onlyLogo from "./images/onlyLogo.png";
-export { logo, logo2, mobile, qrCode, BoxLogo, onlyLogo };
+import PhonePe from "./phone-pe.svg";
+
+export { logo, PhonePe,logo2, mobile, qrCode, BoxLogo, onlyLogo };
