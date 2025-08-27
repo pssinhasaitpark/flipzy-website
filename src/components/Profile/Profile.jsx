@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   FaUmbrella,
@@ -10,6 +10,8 @@ import {
   FaChevronRight,
   FaUsers,
   FaSignOutAlt,
+  FaPencilAlt,
+  FaEllipsisV,
 } from "react-icons/fa";
 import "./Profile.css";
 import { Link } from "react-router-dom";
@@ -17,10 +19,19 @@ import { fetchModuleData } from "../../redux/slices/apiSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfileMenu from "./ProfileMenu";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.api);
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [uploadingPicture, setUploadingPicture] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -29,7 +40,6 @@ const Profile = () => {
     mobile: "",
     isManufacturer: false,
     notificationsEnabled: true,
-    // Additional fields needed for the API
     address: "",
     landmark: "",
     pinCode: "",
@@ -41,7 +51,6 @@ const Profile = () => {
     deviceToken: "",
   });
 
-  // Fetch user profile on component mount
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -61,19 +70,16 @@ const Profile = () => {
             mobile: userData.mobile || "",
             isManufacturer: userData.is_manufacturer === "1",
             notificationsEnabled: true,
-            // Set additional fields from API response
             address: userData.address || "",
             landmark: userData.landmark || "",
             pinCode: userData.pin_code || "",
             profilePic: userData.profile_pic || "",
             gender: userData.gender || "0",
             walletAmount: userData.wallet_amount || "0",
-            appVersion: "1.38", // Static value as per your example
-            deviceType: "0", // Static value as per your example
+            appVersion: "1.38",
+            deviceType: "0",
             deviceToken: userData.device_token || "",
           });
-
-          // Store device token in localStorage if available
           if (userData.device_token) {
             localStorage.setItem("device_token", userData.device_token);
           }
@@ -94,12 +100,81 @@ const Profile = () => {
     }));
   };
 
+  const handlePictureClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Please select a valid image file (JPEG, PNG, GIF)");
+        return;
+      }
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error("File size must be less than 5MB");
+        return;
+      }
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUploadPicture = async () => {
+    if (!selectedFile) {
+      toast.error("Please select an image first");
+      return;
+    }
+    try {
+      setUploadingPicture(true);
+      const formDataUpload = new FormData();
+      formDataUpload.append("module_action", "update_profile_picture");
+      formDataUpload.append("user_id", "22");
+      formDataUpload.append("profile_pic", selectedFile);
+
+      const response = await fetch(
+        "https://berrybazaar.co.in/admin/Application-API/web-services.php/api/upload",
+        {
+          method: "POST",
+          body: formDataUpload,
+        }
+      );
+      if (response.ok) {
+        const result = await response.json();
+        setFormData((prev) => ({
+          ...prev,
+          profilePic: result.profile_pic_url || previewImage,
+        }));
+        toast.success("Profile picture updated successfully!");
+        setSelectedFile(null);
+        setPreviewImage(null);
+        fileInputRef.current.value = "";
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (err) {
+      toast.error("Failed to upload profile picture!");
+      console.error("Error uploading picture:", err);
+    } finally {
+      setUploadingPicture(false);
+    }
+  };
+
   const handleSaveProfile = async () => {
     try {
-      // Get device token from localStorage if not already in formData
       const storedDeviceToken =
         localStorage.getItem("device_token") || formData.deviceToken;
-
       const payload = {
         module_action: "update_profile",
         params: {
@@ -121,17 +196,9 @@ const Profile = () => {
           device_token: storedDeviceToken,
         },
       };
-
-      console.log("Saving profile with payload:", payload);
-
       const response = await dispatch(fetchModuleData(payload)).unwrap();
-
       toast.success("Profile updated successfully!");
-
-      // Update localStorage with the updated profile data
       localStorage.setItem("user_profile", JSON.stringify(formData));
-
-      console.log("Profile update response:", response);
     } catch (err) {
       toast.error("Failed to update profile!");
       console.error("Error updating profile:", err);
@@ -153,16 +220,16 @@ const Profile = () => {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10 col-xl-8">
             <div className="row g-4">
-              {/* Left Column - Profile Info */}
               <div className="col-12 col-md-6">
-                {/* Profile Header Card */}
                 <div className="card shadow-sm mb-4">
                   <div className="card-body text-center">
                     <div className="position-relative d-inline-block mb-3">
                       <img
                         src={
+                          previewImage ||
                           formData.profilePic ||
-                          data.user_profile?.result?.profile_pic
+                          data.user_profile?.result?.profile_pic ||
+                          "/default-avatar.png"
                         }
                         alt="Profile"
                         className="rounded-circle"
@@ -170,9 +237,111 @@ const Profile = () => {
                           width: "80px",
                           height: "80px",
                           objectFit: "cover",
+                          border: "2px solid #dee2e6",
+                          cursor: "pointer",
                         }}
+                        onClick={() => setLightboxOpen(true)}
+                      />
+                      <div
+                        className="dropdown position-absolute"
+                        style={{ bottom: 0, right: 0 }}
+                      >
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary"
+                          onClick={handlePictureClick}
+                          style={{
+                            borderRadius: "50%",
+                            width: "28px",
+                            height: "28px",
+                            padding: "0",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: "2px solid white",
+                          }}
+                          title="Edit profile picture"
+                        >
+                          <FaPencilAlt size={10} />
+                        </button>
+                        {dropdownOpen && (
+                          <div
+                            className="dropdown-menu show"
+                            style={{
+                              position: "absolute",
+                              right: 0,
+                              minWidth: "120px",
+                              zIndex: 1000,
+                            }}
+                          >
+                            <button
+                              className="dropdown-item"
+                              onClick={() => {
+                                setLightboxOpen(true);
+                                setDropdownOpen(false);
+                              }}
+                            >
+                              View
+                            </button>
+                            <button
+                              className="dropdown-item"
+                              onClick={() => {
+                                fileInputRef.current.click();
+                                setDropdownOpen(false);
+                              }}
+                            >
+                              Upload
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleFileSelect}
                       />
                     </div>
+                    {selectedFile && (
+                      <div className="mb-3">
+                        <div className="d-flex gap-2 justify-content-center">
+                          <button
+                            type="button"
+                            className="btn btn-success btn-sm"
+                            onClick={handleUploadPicture}
+                            disabled={uploadingPicture}
+                          >
+                            {uploadingPicture ? (
+                              <>
+                                <span
+                                  className="spinner-border spinner-border-sm me-1"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                Uploading...
+                              </>
+                            ) : (
+                              "Upload"
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => {
+                              setSelectedFile(null);
+                              setPreviewImage(null);
+                              fileInputRef.current.value = "";
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <small className="text-muted d-block mt-1">
+                          Selected: {selectedFile.name}
+                        </small>
+                      </div>
+                    )}
                     <div className="row text-center">
                       <div className="col-4">
                         <div className="fw-bold text-muted small">Post</div>
@@ -195,7 +364,6 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                {/* Edit Profile Form */}
                 <div className="card shadow-sm mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center mb-3">
@@ -223,8 +391,6 @@ const Profile = () => {
                       </label>
                       <div className="fs-6 fw-bold ms-2">{formData.mobile}</div>
                     </div>
-
-                    {/* Additional fields for address information */}
                     <div className="mb-3 d-flex">
                       <label className="form-label text-muted">
                         <span className="text-dark">Address: </span>
@@ -233,7 +399,6 @@ const Profile = () => {
                         {formData.address}
                       </div>
                     </div>
-
                     <div className="mb-3 d-flex">
                       <label className="form-label text-muted">
                         <span className="text-dark">Landmark: </span>
@@ -242,7 +407,6 @@ const Profile = () => {
                         {formData.landmark}
                       </div>
                     </div>
-
                     <div className="mb-3 d-flex">
                       <label className="form-label text-muted">
                         <span className="text-dark">Pin Code: </span>
@@ -251,8 +415,6 @@ const Profile = () => {
                         {formData.pinCode}
                       </div>
                     </div>
-
-                    {/* Manufacturer Toggle */}
                     <div className="mb-3 d-flex justify-content-between align-items-center">
                       <span className="small text-muted">
                         Register as a manufacturer?
@@ -268,7 +430,6 @@ const Profile = () => {
                         <span className="slider"></span>
                       </label>
                     </div>
-                    {/* Conditional Shop Field */}
                     {formData.isManufacturer && (
                       <div className="mb-3">
                         <label className="form-label text-muted">
@@ -284,7 +445,6 @@ const Profile = () => {
                         />
                       </div>
                     )}
-                    {/* Conditional GST Field */}
                     {formData.isManufacturer && (
                       <div className="mb-3">
                         <label className="form-label text-muted">GST:</label>
@@ -301,7 +461,6 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              {/* Right Column - Settings */}
               <div className="col-12 col-md-6">
                 <div className="card shadow-sm mb-4">
                   <div className="card-body">
@@ -335,13 +494,11 @@ const Profile = () => {
                         </label>
                       </div>
                     </div>
-                    {/* Menu Items */}
                     <div className="list-group list-group-flush">
                       <ProfileMenu />
                     </div>
                   </div>
                 </div>
-                {/* Save Button */}
                 <div className="d-grid">
                   <button
                     className="btn btn-success btn-lg btn-block"
@@ -367,6 +524,19 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        slides={[
+          {
+            src:
+              previewImage ||
+              formData.profilePic ||
+              data.user_profile?.result?.profile_pic ||
+              "/default-avatar.png",
+          },
+        ]}
+      />
       <ToastContainer />
     </>
   );
