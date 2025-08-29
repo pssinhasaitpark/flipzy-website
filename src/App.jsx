@@ -44,6 +44,8 @@ import {
   ShippingAddress,
   AddressForm,
   Checkout,
+  PurchaseProtection,
+  UserProfilePage,
 } from "./components";
 import { PrivacyPolicy, TermsNCondition } from "./views/pages";
 
@@ -71,6 +73,9 @@ const App = () => {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-condition" element={<TermsNCondition />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/buyer-protection" element={<PurchaseProtection />} />
+          <Route path="/userprofile" element={<UserProfilePage />} />
+          
           <Route
             path="/cartDetails/:name/:id"
             element={<CartDetailsLayout />}

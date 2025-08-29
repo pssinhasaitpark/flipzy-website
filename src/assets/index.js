@@ -5,5 +5,6 @@ import qrCode from "./images/qr-code.png";
 import BoxLogo from "./images/flipzy_online_store.png";
 import onlyLogo from "./images/onlyLogo.png";
 import PhonePe from "./phone-pe.svg";
+import referimg from "./images/referimg.png";
 
-export { logo, PhonePe,logo2, mobile, qrCode, BoxLogo, onlyLogo };
+export { logo, PhonePe, logo2, mobile, qrCode, BoxLogo, onlyLogo, referimg };
