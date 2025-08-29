@@ -1,0 +1,13 @@
+/* Custom styles for the PurchaseProtection component */
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+/* Ensure the background image is properly displayed */
+.d-flex.align-items-center.justify-content-center {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
