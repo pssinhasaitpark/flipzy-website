@@ -442,41 +442,54 @@ const CartDetailsPage = () => {
               </>
             ) : (
               <>
-                <Link to="/UserProfile" className="text-decoration-none text-black ">
-
-                <div>
-                  <div className="d-flex align-items-center gap-3 mb-4">
-                    <div
-                      className="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                      style={{ width: "60px", height: "60px" }}
-                    >
-                      <img
-                        src={card2}
-                        alt={getSellerName()}
-                        className="rounded-circle"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                    <div className="mx-2">
-                      <div>
-                        <h5 className="mb-1 fw-bold ">{getSellerName()}</h5>
-                        <p className="" style={{ fontSize: "10px" }}>
-                          Active {Math.floor(Math.random() * 50) + 1} mins ago
-                        </p>
+                <Link
+                  to={`/user-profile/${product.seller_id || product.user_id}`}
+                  state={{
+                    sellerId: product.seller_id || product.user_id,
+                    sellerName: getSellerName(),
+                  }}
+                  className="text-decoration-none text-black"
+                >
+                  <div>
+                    <div className="d-flex align-items-center gap-3 mb-4">
+                      <div
+                        className="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                        style={{ width: "60px", height: "60px" }}
+                      >
+                        <img
+                          src={
+                            product.seller_profile_image ||
+                            product.user_profile_image ||
+                            card2
+                          }
+                          alt={getSellerName()}
+                          className="rounded-circle"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </div>
+                      <div className="mx-2">
+                        <div>
+                          <h5 className="mb-1 fw-bold">{getSellerName()}</h5>
+                          <p className="" style={{ fontSize: "10px" }}>
+                            Active {Math.floor(Math.random() * 50) + 1} mins ago
+                          </p>
+                        </div>
                       </div>
                     </div>
+                    <div>
+                      <p
+                        className="text-muted mb-4"
+                        style={{ fontSize: "14px" }}
+                      >
+                        {product.product_detail ||
+                          "Closet refresh in progress! Expect pre-loved pieces, impulse purchases, and items too good to sit in storage. Style range: comfy, cute, and occasionally confused"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-muted mb-4" style={{ fontSize: "14px" }}>
-                      {product.product_detail ||
-                        "Closet refresh in progress! Expect pre-loved pieces, impulse purchases, and items too good to sit in storage. Style range: comfy, cute, and occasionally confused"}
-                    </p>
-                  </div>
-                </div>
                 </Link>
                 <div className="d-lg-flex align-items-center gap-4 mb-4 border justify-content-around p-3">
                   <div className="d-flex align-items-center gap-1">
@@ -494,7 +507,7 @@ const CartDetailsPage = () => {
                   <div>
                     <span className="fw-bold rateNo">49</span>
                     <small className="text-muted ms-1 rateTxt">
-                      days on FreeUp
+                      days on Flipzy
                     </small>
                   </div>
                   <div>

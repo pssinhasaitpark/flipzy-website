@@ -74,7 +74,7 @@ const App = () => {
           <Route path="/terms-and-condition" element={<TermsNCondition />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/buyer-protection" element={<PurchaseProtection />} />
-          <Route path="/userprofile" element={<UserProfilePage />} />
+           <Route path="/user-profile/:sellerId" element={<UserProfilePage />} />
           
           <Route
             path="/cartDetails/:name/:id"
