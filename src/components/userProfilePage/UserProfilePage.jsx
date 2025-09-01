@@ -1,60 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom'; // Import useParams
+import { fetchModuleData } from '../../redux/slices/apiSlice'; // Adjust the import path
 
 const UserProfilePage = () => {
-  const products = [
-    {
-      id: 1,
-      image: "https://via.placeholder.com/200x150/f8f9fa/6c757d?text=Makeup+Kit",
-      title: "Makeup & Hair Acc...",
-      price: "₹399",
-      originalPrice: "₹650"
-    },
-    {
-      id: 2,
-      image: "https://via.placeholder.com/200x150/e3f2fd/1976d2?text=Dr.+Sheth's+Mask",
-      title: "Dr. Sheth's Sleeping ...",
-      price: "₹350",
-      originalPrice: "₹400"
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/200x150/e8f5e8/388e3c?text=Dr.+Sheth's+Serum",
-      title: "Pack Of 3 : Dr. Shet...",
-      price: "₹790",
-      originalPrice: "₹1200"
-    },
-    {
-      id: 4,
-      image: "https://via.placeholder.com/200x150/fff3e0/f57c00?text=Silver+Earrings",
-      title: "Silver Oxidised Earr...",
-      price: "50 Coins",
-      originalPrice: "₹50"
-    },
-    {
-      id: 5,
-      image: "https://via.placeholder.com/200x150/ffeaa7/fdcb6e?text=Multiple+Earrings",
-      title: "Multiple Earrings S...",
-      price: "350 Coins",
-      originalPrice: "₹500"
-    },
-    {
-      id: 6,
-      image: "https://via.placeholder.com/200x150/ddd6fe/8b5cf6?text=Hoop+Earrings",
-      title: "Hoop Earrings ✨",
-      price: "200 Coins",
-      originalPrice: "₹400"
-    }
-  ];
+  const { sellerId } = useParams(); // Get sellerId from the URL
+  const dispatch = useDispatch();
+  const { loading, data, error } = useSelector((state) => state.api);
 
+  // Fetch products when the component mounts or sellerId changes
+  useEffect(() => {
+    if (sellerId) {
+      dispatch(
+        fetchModuleData({
+          module_action: 'getAllProductsBySeller',
+          params: {
+            user_id: sellerId, // Use sellerId from the URL
+            page_no: 1,
+            limit: 10,
+          },
+        })
+      );
+    }
+  }, [dispatch, sellerId]);
+
+  // Extract products from the Redux store
+  const products = data?.getAllProductsBySeller?.product || [];
+
+  // Static data for tags and interests
   const tags = [
     "#Art", "#Crafts", "#Content Creation/Writing", "#Dancing", "#Fashion", "#Make-Up",
     "#Movies/TV Shows", "#Music", "#Nature-Outdoor", "#Skincare"
   ];
-
   const interests = [
     "Declutter", "Recycle/Reuse/Rehome", "Thrifting", "Refresh my closet"
   ];
+
+  // Loading state
+  if (loading.getAllProductsBySeller) {
+    return <div className="text-center mt-5">Loading products...</div>;
+  }
+
+  // Error state
+  if (error.getAllProductsBySeller) {
+    return <div className="text-center mt-5 text-danger">Error: {error.getAllProductsBySeller}</div>;
+  }
 
   return (
     <div className="container mt-4">
@@ -63,17 +54,17 @@ const UserProfilePage = () => {
         <div className="card-body">
           <div className="row align-items-center">
             <div className="col-md-3 text-center">
-              <img 
-                src="https://via.placeholder.com/100x100/6c757d/ffffff?text=Profile" 
-                alt="Profile" 
+              <img
+                src="https://via.placeholder.com/100x100/6c757d/ffffff?text=Profile"
+                alt="Profile"
                 className="rounded-circle mb-3"
-                style={{width: '100px', height: '100px'}}
+                style={{ width: '100px', height: '100px' }}
               />
-              <h5 className="mb-1">Shashi</h5>
-              <p className="text-muted mb-3">@shashi2395</p>
+              <h5 className="mb-1">{products[0]?.seller_name || "Shashi"}</h5>
+              <p className="text-muted mb-3">@{products[0]?.username || "shashi2395"}</p>
               <button className="btn btn-warning btn-lg w-100 rounded-pill">Follow</button>
             </div>
-            
+
             <div className="col-md-3">
               <div className="text-center">
                 <div className="row">
@@ -91,7 +82,7 @@ const UserProfilePage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-4">
                 <div className="row text-center">
                   <div className="col-4">
@@ -115,7 +106,7 @@ const UserProfilePage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="col-md-6">
               {/* Bio */}
               <div className="mb-3">
@@ -129,21 +120,21 @@ const UserProfilePage = () => {
                 </div>
                 <div className="d-flex align-items-center mb-3">
                   <i className="bi bi-geo-alt me-2"></i>
-                  <span className="text-muted">Jammu and Kashmir, Jammu</span>
+                  <span className="text-muted">{products[0]?.pickup_address || "Jammu and Kashmir, Jammu"}</span>
                 </div>
               </div>
-              
+
               {/* Tags */}
               <div className="mb-3">
                 <div className="d-flex flex-wrap gap-1">
                   {tags.map((tag, index) => (
-                    <span key={index} className="badge bg-light text-primary border rounded-pill px-2 py-1" style={{fontSize: '0.75rem'}}>
+                    <span key={index} className="badge bg-light text-primary border rounded-pill px-2 py-1" style={{ fontSize: '0.75rem' }}>
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
-              
+
               {/* Interests */}
               <div className="mb-3">
                 <div className="d-flex flex-wrap gap-2">
@@ -154,11 +145,11 @@ const UserProfilePage = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="mb-2">
                 <span className="badge bg-success rounded-pill px-3 py-1">Save the planet</span>
               </div>
-              
+
               <div className="text-muted">
                 <small>🕒 Joined FreeUp 4 years ago</small>
               </div>
@@ -171,7 +162,7 @@ const UserProfilePage = () => {
       <div className="d-flex justify-content-center mb-4">
         <ul className="nav nav-pills">
           <li className="nav-item">
-            <a className="nav-link active" href="#selling">Selling 6</a>
+            <a className="nav-link active" href="#selling">Selling {products.length}</a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#reviews">Reviews 15</a>
@@ -179,29 +170,27 @@ const UserProfilePage = () => {
         </ul>
       </div>
 
-      {/* Products Grid */}
+      {/* Products Grid (dynamic) */}
       <div className="row">
         {products.map((product) => (
           <div key={product.id} className="col-lg-2 col-md-4 col-sm-6 mb-4">
             <div className="card h-100 shadow-sm">
-              <img 
-                src={product.image} 
-                className="card-img-top" 
-                alt={product.title}
-                style={{height: '150px', objectFit: 'cover'}}
+              <img
+                src={product.product_slider_image[0]?.image || "https://via.placeholder.com/200x150/6c757d/ffffff?text=No+Image"}
+                className="card-img-top"
+                alt={product.product_name}
+                style={{ height: '150px', objectFit: 'cover' }}
               />
               <div className="card-body p-3">
-                <h6 className="card-title mb-2" style={{fontSize: '0.9rem', height: '2.2rem', overflow: 'hidden'}}>
-                  {product.title}
+                <h6 className="card-title mb-2" style={{ fontSize: '0.9rem', height: '2.2rem', overflow: 'hidden' }}>
+                  {product.product_name}
                 </h6>
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
-                    <span className="fw-bold text-dark">{product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-muted text-decoration-line-through ms-2" style={{fontSize: '0.8rem'}}>
-                        {product.originalPrice}
-                      </span>
-                    )}
+                    <span className="fw-bold text-dark">₹{product.selling_price}</span>
+                    <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '0.8rem' }}>
+                      ₹{product.mrp}
+                    </span>
                   </div>
                 </div>
               </div>
