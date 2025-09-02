@@ -1,22 +1,27 @@
-import React, { useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'; // Import useParams
-import { fetchModuleData } from '../../redux/slices/apiSlice'; // Adjust the import path
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchModuleData } from "../../redux/slices/apiSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserProfilePage = () => {
-  const { sellerId } = useParams(); // Get sellerId from the URL
+  const { sellerId } = useParams();
   const dispatch = useDispatch();
+
   const { loading, data, error } = useSelector((state) => state.api);
 
-  // Fetch products when the component mounts or sellerId changes
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  // Fetch products by seller
   useEffect(() => {
     if (sellerId) {
       dispatch(
         fetchModuleData({
-          module_action: 'getAllProductsBySeller',
+          module_action: "getAllProductsBySeller",
           params: {
-            user_id: sellerId, // Use sellerId from the URL
+            user_id: sellerId,
             page_no: 1,
             limit: 10,
           },
@@ -25,133 +30,216 @@ const UserProfilePage = () => {
     }
   }, [dispatch, sellerId]);
 
-  // Extract products from the Redux store
+  // Fetch user profile data (image, viewed count, total items)
+  useEffect(() => {
+    if (sellerId) {
+      dispatch(
+        fetchModuleData({
+          module_action: "user_profile",
+          params: {
+            user_id: sellerId,
+          },
+        })
+      );
+    }
+  }, [dispatch, sellerId]);
+
   const products = data?.getAllProductsBySeller?.product || [];
+  const userProfile = data?.user_profile || {};
+  const defaultAvatarUrl = "https://avatar.iran.liara.run/public/boy"; // Default avatar image URL
 
-  // Static data for tags and interests
-  const tags = [
-    "#Art", "#Crafts", "#Content Creation/Writing", "#Dancing", "#Fashion", "#Make-Up",
-    "#Movies/TV Shows", "#Music", "#Nature-Outdoor", "#Skincare"
-  ];
-  const interests = [
-    "Declutter", "Recycle/Reuse/Rehome", "Thrifting", "Refresh my closet"
-  ];
+  // Use profile_pic if present, else use default avatar
+  const profileImage = userProfile.result?.profile_pic || defaultAvatarUrl;
 
-  // Loading state
-  if (loading.getAllProductsBySeller) {
-    return <div className="text-center mt-5">Loading products...</div>;
+  const viewedCount = userProfile.result?.seen_count ?? 1247;
+  const totalItems = userProfile.result?.total_items ?? products.length;
+
+  const formattedViewed =
+    viewedCount >= 1000
+      ? (viewedCount / 1000).toFixed(1) + "K"
+      : viewedCount.toString();
+
+  const handleFollowClick = () => {
+    setIsFollowing((prev) => !prev);
+    if (!isFollowing) {
+      toast.success(`You followed ${products[0]?.seller_name || "this user"}!`);
+    }
+  };
+
+  if (loading.getAllProductsBySeller || loading.user_profile) {
+    return (
+      <div className="text-center mt-5">Loading profile and products...</div>
+    );
   }
 
-  // Error state
-  if (error.getAllProductsBySeller) {
-    return <div className="text-center mt-5 text-danger">Error: {error.getAllProductsBySeller}</div>;
+  if (error.getAllProductsBySeller || error.user_profile) {
+    return (
+      <div className="text-center mt-5 text-danger">
+        Error: {error.getAllProductsBySeller || error.user_profile}
+      </div>
+    );
   }
 
   return (
     <div className="container mt-4">
-      {/* Profile Header */}
-      <div className="card shadow-sm mb-4">
-        <div className="card-body">
-          <div className="row align-items-center">
-            <div className="col-md-3 text-center">
-              <img
-                src="https://via.placeholder.com/100x100/6c757d/ffffff?text=Profile"
-                alt="Profile"
-                className="rounded-circle mb-3"
-                style={{ width: '100px', height: '100px' }}
-              />
-              <h5 className="mb-1">{products[0]?.seller_name || "Shashi"}</h5>
-              <p className="text-muted mb-3">@{products[0]?.username || "shashi2395"}</p>
-              <button className="btn btn-warning btn-lg w-100 rounded-pill">Follow</button>
-            </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
-            <div className="col-md-3">
-              <div className="text-center">
-                <div className="row">
-                  <div className="col-4">
-                    <h4 className="mb-0">81</h4>
-                    <small className="text-muted">Followers</small>
+      {/* Updated Profile Header */}
+      <div className="position-relative mb-4">
+        <div
+          className="card border-0 overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)",
+            borderRadius: "24px",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.08)",
+          }}
+        >
+          <div className="card-body p-4">
+            <div className="row align-items-center">
+              {/* Profile Section */}
+              <div className="col-md-6">
+                <div className="d-flex align-items-center">
+                  <div
+                    className="position-relative mr-4"
+                    style={{ width: "120px", height: "120px" }}
+                  >
+                    <img
+                      src="https://avatar.iran.liara.run/public/boy"
+                      alt="Profile"
+                      className="rounded-circle"
+                      style={{
+                        width: "120px",
+                        height: "120px",
+                        border: "4px solid #fff",
+                        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.1)",
+                        objectFit: "cover",
+                      }}
+                    />
                   </div>
-                  <div className="col-4">
-                    <h4 className="mb-0">0</h4>
-                    <small className="text-muted">Following</small>
-                  </div>
-                  <div className="col-4">
-                    <h4 className="mb-0">4.73 ⭐</h4>
-                    <small className="text-muted">Rating</small>
+                  <div>
+                    <h2
+                      className="mb-1 fw-bold"
+                      style={{
+                        fontSize: "2rem",
+                        background: "linear-gradient(135deg, #667eea, #764ba2)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {products[0]?.seller_name || "Shashi"}
+                    </h2>
+                    <p
+                      className="text-muted mb-3"
+                      style={{ fontSize: "1.1rem" }}
+                    >
+                      @{products[0]?.username || "shashi2395"}
+                    </p>
+                    <button
+                      className="btn btn-lg px-4 py-2 fw-semibold"
+                      style={{
+                        background: isFollowing
+                          ? "linear-gradient(135deg, #ff9999, #cc0000)"
+                          : "linear-gradient(135deg,rgb(149, 238, 127),rgb(46, 185, 104))",
+                        border: "none",
+                        borderRadius: "50px",
+                        color: "white",
+                        boxShadow: isFollowing
+                          ? "0 6px 20px rgba(150, 150, 150, 0.3)"
+                          : "0 6px 20px rgba(255, 107, 107, 0.3)",
+                        transition: "all 0.3s ease",
+                        cursor: "pointer",
+                      }}
+                      onClick={handleFollowClick}
+                      onMouseEnter={(e) => {
+                        e.target.style.transform = "translateY(-2px)";
+                        e.target.style.boxShadow = isFollowing
+                          ? "0 8px 25px rgba(150, 150, 150, 0.4)"
+                          : "0 8px 25px rgba(255, 107, 107, 0.4)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow = isFollowing
+                          ? "0 6px 20px rgba(150, 150, 150, 0.3)"
+                          : "0 6px 20px rgba(255, 107, 107, 0.3)";
+                      }}
+                    >
+                      <i className="fas fa-plus me-2"></i>
+                      {isFollowing ? "Unfollow" : "Follow"}
+                    </button>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4">
-                <div className="row text-center">
-                  <div className="col-4">
-                    <div className="d-flex flex-column align-items-center">
-                      <span className="badge bg-warning text-dark rounded-circle p-2 mb-1">15</span>
-                      <small>Sold Myself</small>
+              {/* Stats Section */}
+              <div className="col-md-6">
+                <div
+                  className="d-flex justify-content-around align-items-center h-100"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.7)",
+                    borderRadius: "16px",
+                    padding: "2rem 1rem",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="display-4 fw-bold mb-2"
+                      style={{
+                        background: "linear-gradient(135deg, #667eea, #764ba2)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {totalItems}
+                    </div>
+                    <div
+                      className="text-uppercase fw-semibold"
+                      style={{
+                        fontSize: "0.9rem",
+                        letterSpacing: "1px",
+                        color: "#6c757d",
+                      }}
+                    >
+                      Total Items
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="d-flex flex-column align-items-center">
-                      <span className="badge bg-warning text-dark rounded-circle p-2 mb-1">0</span>
-                      <small>Sold via PopUp</small>
+
+                  <div
+                    style={{
+                      width: "2px",
+                      height: "60px",
+                      background:
+                        "linear-gradient(to bottom, transparent, rgba(108, 117, 125, 0.3), transparent)",
+                    }}
+                  ></div>
+
+                  <div className="text-center">
+                    <div
+                      className="display-4 fw-bold mb-2"
+                      style={{
+                        background: "linear-gradient(135deg, #667eea, #764ba2)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {formattedViewed}
+                    </div>
+                    <div
+                      className="text-uppercase fw-semibold"
+                      style={{
+                        fontSize: "0.9rem",
+                        letterSpacing: "1px",
+                        color: "#6c757d",
+                      }}
+                    >
+                      Viewed
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="d-flex flex-column align-items-center">
-                      <span className="badge bg-warning text-dark rounded-circle p-2 mb-1">0</span>
-                      <small>Cancelled as Seller</small>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              {/* Bio */}
-              <div className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <i className="bi bi-person-badge me-2"></i>
-                  <span className="text-muted">A sketch artist who believes in reuse/recycle/rehome!</span>
-                </div>
-                <div className="d-flex align-items-center mb-2">
-                  <i className="bi bi-palette me-2"></i>
-                  <span className="text-muted">Artist</span>
-                </div>
-                <div className="d-flex align-items-center mb-3">
-                  <i className="bi bi-geo-alt me-2"></i>
-                  <span className="text-muted">{products[0]?.pickup_address || "Jammu and Kashmir, Jammu"}</span>
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div className="mb-3">
-                <div className="d-flex flex-wrap gap-1">
-                  {tags.map((tag, index) => (
-                    <span key={index} className="badge bg-light text-primary border rounded-pill px-2 py-1" style={{ fontSize: '0.75rem' }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Interests */}
-              <div className="mb-3">
-                <div className="d-flex flex-wrap gap-2">
-                  {interests.map((interest, index) => (
-                    <span key={index} className="badge bg-primary rounded-pill px-3 py-1">
-                      {interest}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-2">
-                <span className="badge bg-success rounded-pill px-3 py-1">Save the planet</span>
-              </div>
-
-              <div className="text-muted">
-                <small>🕒 Joined FreeUp 4 years ago</small>
               </div>
             </div>
           </div>
@@ -160,14 +248,60 @@ const UserProfilePage = () => {
 
       {/* Navigation Tabs */}
       <div className="d-flex justify-content-center mb-4">
-        <ul className="nav nav-pills">
-          <li className="nav-item">
-            <a className="nav-link active" href="#selling">Selling {products.length}</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#reviews">Reviews 15</a>
-          </li>
-        </ul>
+        <ul className="nav nav-pills gap-2">
+  {/* Selling Tab */}
+  <li className="nav-item mr-5">
+    <a
+      className="nav-link px-4 py-2 rounded-pill fw-bold shadow-sm"
+      href="#selling"
+      style={{
+        background: "linear-gradient(135deg, #7b42f6, #6c63ff)",
+        color: "white",
+        border: "none",
+        transition: "all 0.3s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.transform = "scale(1.05)";
+        e.target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.transform = "scale(1)";
+        e.target.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
+      }}
+    >
+      Selling {products.length}
+    </a>
+  </li>
+
+  {/* Reviews Tab */}
+  <li className="nav-item">
+    <a
+      className="nav-link px-4 py-2 rounded-pill border fw-semibold shadow-sm"
+      href="#reviews"
+      style={{
+        color: "#6c63ff",
+        borderColor: "#6c63ff",
+        transition: "all 0.3s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.background =
+          "linear-gradient(135deg, #6c63ff, #7b42f6)";
+        e.target.style.color = "white";
+        e.target.style.transform = "scale(1.05)";
+        e.target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.background = "transparent";
+        e.target.style.color = "#6c63ff";
+        e.target.style.transform = "scale(1)";
+        e.target.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
+      }}
+    >
+      Reviews 15
+    </a>
+  </li>
+</ul>
+
       </div>
 
       {/* Products Grid (dynamic) */}
@@ -176,19 +310,31 @@ const UserProfilePage = () => {
           <div key={product.id} className="col-lg-2 col-md-4 col-sm-6 mb-4">
             <div className="card h-100 shadow-sm">
               <img
-                src={product.product_slider_image[0]?.image || "https://via.placeholder.com/200x150/6c757d/ffffff?text=No+Image"}
+                src={product.product_slider_image[0]?.image || defaultAvatarUrl}
                 className="card-img-top"
                 alt={product.product_name}
-                style={{ height: '150px', objectFit: 'cover' }}
+                style={{ height: "150px", objectFit: "cover" }}
               />
               <div className="card-body p-3">
-                <h6 className="card-title mb-2" style={{ fontSize: '0.9rem', height: '2.2rem', overflow: 'hidden' }}>
+                <h6
+                  className="card-title mb-2"
+                  style={{
+                    fontSize: "0.9rem",
+                    height: "2.2rem",
+                    overflow: "hidden",
+                  }}
+                >
                   {product.product_name}
                 </h6>
                 <div className="d-flex align-items-center justify-content-between">
                   <div>
-                    <span className="fw-bold text-dark">₹{product.selling_price}</span>
-                    <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '0.8rem' }}>
+                    <span className="fw-bold text-dark">
+                      ₹{product.selling_price}
+                    </span>
+                    <span
+                      className="text-muted text-decoration-line-through ms-2"
+                      style={{ fontSize: "0.8rem" }}
+                    >
                       ₹{product.mrp}
                     </span>
                   </div>
