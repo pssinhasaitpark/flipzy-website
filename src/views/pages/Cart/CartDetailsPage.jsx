@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import {useShuffleArray} from "../../../hooks/useShuffleArray.js";
 import {
   Eye,
   Heart,
@@ -56,6 +57,7 @@ const ShareWithFriends = () => {
 };
 
 const CartDetailsPage = () => {
+  // --- Hooks and State ---
   const { id } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -71,6 +73,10 @@ const CartDetailsPage = () => {
   const [commentsPage, setCommentsPage] = useState(1);
   const [hasMoreComments, setHasMoreComments] = useState(true);
   const [comment, setComment] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+
+  // --- Data Fetching ---
   const freshDealsData = data[products]?.product || [];
   const exclusiveProductData = data[exclusiveProducts]?.product || [];
   const commentsData = data[getCommentsOnProducts]?.comments || [];
@@ -79,16 +85,21 @@ const CartDetailsPage = () => {
     : Array.isArray(data?.product)
     ? data.product
     : [];
+
+  // --- Shuffle Data (Hooks called unconditionally at the top) ---
+  const shuffledExclusiveItems = useShuffleArray(exclusiveProductData);
+  const shuffledFreshDeals = useShuffleArray(freshDealsData);
+
+  // --- Product and Seller Logic ---
   const product =
     allProducts.find((item) => String(item.id) === String(id)) || passedProduct;
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 
   const getSellerName = () => {
     if (!product) return "Unknown Seller";
     return product.seller_name || product.username || "Unknown Seller";
   };
 
+  // --- Effects ---
   useEffect(() => {
     dispatch(
       fetchModuleData({
@@ -159,6 +170,7 @@ const CartDetailsPage = () => {
     console.log("Comments:", comments);
   }, [data, comments]);
 
+  // --- Handlers ---
   const handleCloseLoginPopup = () => {
     setIsLoginPopupOpen(false);
   };
@@ -179,12 +191,6 @@ const CartDetailsPage = () => {
     window.dispatchEvent(new Event("authChange"));
   };
 
-  if (!product) {
-    console.log("Product not found for ID:", id);
-    return <p className="text-center mt-5">Product not found</p>;
-  }
-
-  const productImages = product.product_slider_image || [card2, card2, card2];
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -196,22 +202,24 @@ const CartDetailsPage = () => {
     const diffInMinutes = Math.floor((now - date) / (1000 * 60));
     if (diffInMinutes < 1) return "Just now";
     if (diffInMinutes < 60) return `${diffInMinutes} mins ago`;
-    if (diffInMinutes < 1440)
-      return `${Math.floor(diffInMinutes / 60)} hours ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
     return `${Math.floor(diffInMinutes / 1440)} days ago`;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (comment.trim()) {
-      onAddComment(comment);
-      setComment("");
-    }
-  };
+  // --- Early Return ---
+  if (!product) {
+    console.log("Product not found for ID:", id);
+    return <p className="text-center mt-5">Product not found</p>;
+  }
 
+  // --- Product Images ---
+  const productImages = product.product_slider_image || [card2, card2, card2];
+
+  // --- Render ---
   return (
     <>
       <Container fluid className="py-4" style={{ maxWidth: "1600px" }}>
+        {/* --- Product Image Gallery (Desktop) --- */}
         <Row>
           <div className="col-xl-2 pe-2 p-0 d-xl-block d-none">
             <div className="d-flex flex-column gap-2">
@@ -244,6 +252,8 @@ const CartDetailsPage = () => {
                   ))}
             </div>
           </div>
+
+          {/* --- Main Product Image --- */}
           <div className="col-xl-5 col-lg-6 col-md-12 px-2">
             {loading ? (
               <Skeleton height={800} width="100%" />
@@ -258,6 +268,8 @@ const CartDetailsPage = () => {
               </Card>
             )}
           </div>
+
+          {/* --- Product Image Gallery (Mobile) --- */}
           <div className="col-12 d-xl-none d-block mt-3 order-lg-3 order-md-3">
             <div className="d-flex justify-content-center gap-2 flex-wrap">
               {loading
@@ -294,6 +306,8 @@ const CartDetailsPage = () => {
                   ))}
             </div>
           </div>
+
+          {/* --- Product Details --- */}
           <div className="col-xl-5 col-lg-6 col-md-12 ps-4 mt-2 order-lg-2 order-md-2">
             {loading ? (
               <>
@@ -430,6 +444,8 @@ const CartDetailsPage = () => {
             )}
           </div>
         </Row>
+
+        {/* --- Seller Info and Comments --- */}
         <Row className="mt-5">
           <Col xs={12}>
             {loading ? (
@@ -517,6 +533,8 @@ const CartDetailsPage = () => {
                 </div>
               </>
             )}
+
+            {/* --- Exclusive Products Section --- */}
             {loading ? (
               <Row className="g-3 mb-5">
                 {Array.from({ length: 6 }).map((_, idx) => (
@@ -527,8 +545,8 @@ const CartDetailsPage = () => {
               </Row>
             ) : (
               <Row className="g-3 mb-5">
-                {exclusiveProductData.map((product) => (
-                  <div className="col-sm-2" key={product.id}>
+                {shuffledExclusiveItems.map((product, idx) => (
+                  <div className="col-sm-2" key={product.id || idx}>
                     <Card className="h-100 border-light">
                       <Link
                         to={{
@@ -541,7 +559,7 @@ const CartDetailsPage = () => {
                       >
                         <Card.Img
                           variant="top"
-                          src={product.product_slider_image[0].image}
+                          src={product.product_slider_image?.[0]?.image || card2}
                           style={{ height: "280px", objectFit: "cover" }}
                         />
                       </Link>
@@ -557,13 +575,13 @@ const CartDetailsPage = () => {
                             className="text-muted text-decoration-line-through"
                             style={{ fontSize: "10px" }}
                           >
-                            {product.selling_price}
+                            ₹{product.mrp}
                           </small>
                           <span
                             className="fw-bold text-success mx-1"
-                            style={{ fontSize: "10px" }}
+                            style={{ fontSize: "12px" }}
                           >
-                            <del>{product.mrp}</del>
+                            ₹{product.selling_price}
                           </span>
                         </div>
                       </Card.Body>
@@ -572,14 +590,17 @@ const CartDetailsPage = () => {
                 ))}
               </Row>
             )}
+
+            {/* --- Share with Friends --- */}
             <ShareWithFriends />
+
+            {/* --- Comments Section --- */}
             {!loading && comments.length >= 1 && (
               <div>
                 <h6 className="fw-bold mb-3 d-flex align-items-center gap-2">
                   <MessageCircle size={18} className="mr-2" />
                   COMMENTS {comments.length > 0 && `(${comments.length})`}
                 </h6>
-
                 {commentsLoading && comments.length === 0 ? (
                   <div className="mx-4">
                     {Array.from({ length: 3 }).map((_, idx) => (
@@ -659,7 +680,6 @@ const CartDetailsPage = () => {
                         </div>
                       </div>
                     ))}
-
                     {hasMoreComments && (
                       <div className="text-center mt-3">
                         <Button
@@ -685,6 +705,8 @@ const CartDetailsPage = () => {
             )}
           </Col>
         </Row>
+
+        {/* --- You May Also Like Section --- */}
         <div className="row mt-4">
           <div className="col-12 text-center mb-4">
             <h2 className="fw-bold" style={{ fontSize: "2rem", color: "#333" }}>
@@ -712,7 +734,7 @@ const CartDetailsPage = () => {
           </Row>
         ) : (
           <Row className="g-3 mb-5">
-            {freshDealsData.map((product) => (
+            {shuffledFreshDeals.map((product) => (
               <div className="col-sm-2" key={product.id}>
                 <Card className="h-100 border-0 mt-4">
                   <Link
@@ -726,7 +748,7 @@ const CartDetailsPage = () => {
                   >
                     <Card.Img
                       variant="top"
-                      src={product.product_slider_image[0].image}
+                      src={product.product_slider_image?.[0]?.image || card2}
                       style={{ height: "280px", objectFit: "cover" }}
                     />
                   </Link>
@@ -758,6 +780,8 @@ const CartDetailsPage = () => {
           </Row>
         )}
       </Container>
+
+      {/* --- Login Popup --- */}
       <LoginPopup
         show={isLoginPopupOpen}
         handleClose={handleCloseLoginPopup}
@@ -765,10 +789,6 @@ const CartDetailsPage = () => {
       />
     </>
   );
-};
-
-const onAddComment = (commentText) => {
-  console.log("Adding comment:", commentText);
 };
 
 export default CartDetailsPage;
