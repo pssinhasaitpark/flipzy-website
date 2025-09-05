@@ -11,9 +11,9 @@ const CartDetailsLayout = () => {
     <div>
       <HeaderSeeAll />
       <CartDetails />
-      <DownloadQR />
+      {/* <DownloadQR />
       <Footer />
-      <FooterBottom />
+      <FooterBottom /> */}
     </div>
   );
 };

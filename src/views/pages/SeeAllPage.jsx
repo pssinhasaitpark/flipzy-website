@@ -871,7 +871,7 @@ const SeeAllPage = () => {
                         onClick={() => handlePageClick(pageNo + 1)}
                         disabled={pageNo === totalPages}
                       >
-                        Next sss
+                        Next
                       </button>
                     </li>
                   </ul>
